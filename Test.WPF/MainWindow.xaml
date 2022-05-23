@@ -24,7 +24,7 @@
               Margin="5">
                 <MenuItem Header="О программе" Command="{x:Static md:DialogHost.OpenDialogCommand}"/>
                 <MenuItem Header="О разработчике"/>
-                <MenuItem Header="Выход">
+                <MenuItem Header="Выход"/>
             </Menu>
 
             <DockPanel>

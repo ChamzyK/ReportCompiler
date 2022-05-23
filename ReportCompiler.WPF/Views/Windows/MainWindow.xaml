@@ -3,23 +3,58 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         DataContext="{Binding Path=MainViewModel, Source={StaticResource Locator}}"
         Title="{Binding Title}" 
-        Height="450" Width="500">
-    <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="О программе"/>
-            <MenuItem Header="О разработчике"/>
-            <MenuItem Header="Выход" Command="{StaticResource CloseWindowCommand}"/>
-        </Menu>
+        Height="500" Width="500"
+        MinHeight="450" MinWidth="450"
+        Style="{DynamicResource MaterialDesignWindow}"
+        WindowStartupLocation="CenterScreen">
 
-        <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem Content="СтатусБар!!!"/>
-            <StatusBarItem HorizontalAlignment="Right">
-                <ResizeGrip/>
-            </StatusBarItem>
-        </StatusBar>
+    <Window.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Window.Resources>
+    
+    <md:DialogHost>
+
+        <md:DialogHost.DialogContent>
+            <UniformGrid Columns="1" Width="250">
+                <TextBlock Text="Введите текст: "/>
+                <TextBox TextWrapping="Wrap"/>
+                <Button Content="Закрыть" Command="{x:Static md:DialogHost.CloseDialogCommand}"/>
+            </UniformGrid>
+        </md:DialogHost.DialogContent>
+
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="О программе" Command="{x:Static md:DialogHost.OpenDialogCommand}"/>
+                <MenuItem Header="О разработчике"/>
+                <MenuItem Header="Выход"/>
+            </Menu>
+
+            <DockPanel>
+
+                <UniformGrid DockPanel.Dock="Bottom" Rows="1">
+                    <Button Content="Проверить данные"/>
+                    <Button Content="Составить отчёт"/>
+                </UniformGrid>
+
+                <GroupBox Margin="5">
+                    <GroupBox.Header>
+                        <TextBlock Text="Выберите папку" FontSize="16"/>
+                    </GroupBox.Header>
+                    <ListBox>
+                        <ListBoxItem Content="Первый"/>
+                        <ListBoxItem Content="Второй"/>
+                        <ListBoxItem Content="Третий"/>
+                    </ListBox>
+                </GroupBox>
+
+            </DockPanel>
+
+        </DockPanel>
         
-        <Grid/>
-    </DockPanel>
+    </md:DialogHost>
 </Window>
