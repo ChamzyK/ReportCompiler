@@ -5,8 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         DataContext="{Binding Path=MainViewModel, Source={StaticResource Locator}}"
         Title="{Binding Title}" 
-        Height="450" Width="800">
-    <Grid>
+        Height="450" Width="500">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="О программе"/>
+            <MenuItem Header="О разработчике"/>
+            <MenuItem Header="Выход" Command="{StaticResource CloseWindowCommand}"/>
+        </Menu>
 
-    </Grid>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem Content="СтатусБар!!!"/>
+            <StatusBarItem HorizontalAlignment="Right">
+                <ResizeGrip/>
+            </StatusBarItem>
+        </StatusBar>
+        
+        <Grid/>
+    </DockPanel>
 </Window>
