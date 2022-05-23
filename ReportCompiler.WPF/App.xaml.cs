@@ -3,12 +3,16 @@ using Microsoft.Extensions.Hosting;
 using ReportCompiler.WPF.Services;
 using ReportCompiler.WPF.ViewModels;
 using System;
+using System.Linq;
 using System.Windows;
 
 namespace ReportCompiler.WPF
 {
     public partial class App : Application
     {
+        public static Window? FocusedWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsFocused);
+        public static Window? ActiveWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsActive);
+
         private static IHost? host;
         public static IHost Host => host ??= Program.CreateHostBuilder(Environment.GetCommandLineArgs()).Build();
 

@@ -5,7 +5,7 @@ namespace ReportCompiler.WPF.Infrastructure.Commands.Base
 {
     internal abstract class Command : ICommand
     {
-        private bool executable;
+        private bool executable = true;
         public bool Executable
         {
             get => executable;
