@@ -1,8 +1,6 @@
-﻿using System.Windows;
-
-namespace ReportCompiler.WPF
+﻿namespace ReportCompiler.WPF
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow() => InitializeComponent();
     }
