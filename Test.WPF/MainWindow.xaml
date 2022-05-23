@@ -3,23 +3,41 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:local="clr-namespace:Test.WPF"
         mc:Ignorable="d"
         Title="Тестовый проект" 
-        Height="450" Width="550"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}">
-    <Grid>
-        <StackPanel>
-            <materialDesign:Card Padding="32" Margin="16">
-                <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}">My First Material Design App</TextBlock>
-            </materialDesign:Card>
-        </StackPanel>
-    </Grid>
+        Height="500" Width="500"
+        Style="{DynamicResource MaterialDesignWindow}"
+        WindowStartupLocation="CenterScreen">
+    
+    <DockPanel>
+        <Menu DockPanel.Dock="Top"
+              Margin="5">
+            <MenuItem Header="О программе"/>
+            <MenuItem Header="О разработчике"/>
+            <MenuItem Header="Выход"/>
+        </Menu>
+        
+        <DockPanel>
+            <UniformGrid DockPanel.Dock="Bottom" Rows="1">
+                
+                <Button Content="Проверить данные" Margin="5"/>
+                
+                <Button Content="Составить отчёт" Margin="5"/>
+
+            </UniformGrid>
+
+            <GroupBox Margin="5">
+                <GroupBox.Header>
+                    <TextBlock Text="Выберите папку" FontSize="16"/>
+                </GroupBox.Header>
+                <ListBox>
+                    <ListBoxItem Content="Первый"/>
+                    <ListBoxItem Content="Второй"/>
+                    <ListBoxItem Content="Третий"/>
+                </ListBox>
+            </GroupBox>
+            
+        </DockPanel>
+        
+    </DockPanel>
 </Window>
