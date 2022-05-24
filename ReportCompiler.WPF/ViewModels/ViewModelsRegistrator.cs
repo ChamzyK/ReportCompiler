@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using ReportCompiler.WPF.ViewModels.UserControlViewModels;
 
 namespace ReportCompiler.WPF.ViewModels
 {
@@ -6,6 +7,7 @@ namespace ReportCompiler.WPF.ViewModels
     {
         public static IServiceCollection AddViewModels(this IServiceCollection services) => services
             .AddSingleton<MainViewModel>()
+            .AddTransient<InfoViewModel>()
         ;
     }
 }
