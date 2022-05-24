@@ -11,17 +11,17 @@
                   Grid.Row="1">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel.InputBindings>
+                <DockPanel>
+                    <DockPanel.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick"
                                           Command="{Binding DataContext.OpenDirectoryCommand,
                                                    RelativeSource={RelativeSource FindAncestor,
                                                    AncestorType=UserControl}}"
                                           CommandParameter="{Binding}"/>
-                    </StackPanel.InputBindings>
-                    <md:PackIcon Kind="Folder" Margin="0,0,5,0"/>
+                    </DockPanel.InputBindings>
+                    <md:PackIcon Kind="{Binding PackIconKind}" Margin="0,0,5,0" DockPanel.Dock="Left"/>
                     <TextBlock Text="{Binding Name}"/>
-                </StackPanel>
+                </DockPanel>
             </DataTemplate>
         </ListView.ItemTemplate>
         <ListView.ItemContainerStyle>
