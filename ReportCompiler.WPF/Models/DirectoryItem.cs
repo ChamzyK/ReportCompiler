@@ -7,5 +7,6 @@ namespace ReportCompiler.WPF.Models
         public string? Name { get; set; }
         public bool IsDirectory { get; set; }
         public PackIconKind PackIconKind => IsDirectory ? PackIconKind.Folder : PackIconKind.MicrosoftExcel;
+        
     }
 }

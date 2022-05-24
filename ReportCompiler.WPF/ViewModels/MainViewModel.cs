@@ -2,7 +2,6 @@
 using ReportCompiler.WPF.Services.Interfaces;
 using ReportCompiler.WPF.ViewModels.Base;
 using ReportCompiler.WPF.ViewModels.UserControlViewModels;
-using System;
 using System.Windows.Input;
 
 namespace ReportCompiler.WPF.ViewModels

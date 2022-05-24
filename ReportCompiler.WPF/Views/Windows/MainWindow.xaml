@@ -7,7 +7,7 @@
         xmlns:ucvm="clr-namespace:ReportCompiler.WPF.ViewModels.UserControlViewModels"
         xmlns:ucv="clr-namespace:ReportCompiler.WPF.Views.UserControls"
         DataContext="{Binding Path=MainViewModel, Source={StaticResource Locator}}"
-        Title="{Binding Title}" 
+        Title="{Binding Title}"
         Height="500" Width="500"
         MinHeight="450" MinWidth="450"
         Style="{DynamicResource MaterialDesignWindow}"
