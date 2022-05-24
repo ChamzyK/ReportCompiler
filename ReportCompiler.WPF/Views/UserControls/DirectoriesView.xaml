@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d">
     <ListView ItemsSource="{Binding DirectoryService.DirectoryContent}" 
-              SelectedItem="{Binding SelectedDirectory}">
+              SelectedItem="{Binding SelectedItem}">
         
         <ListView.ItemTemplate>
             <DataTemplate>
@@ -13,7 +13,7 @@
                     
                     <DockPanel.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick"
-                                      Command="{Binding DataContext.OpenDirectoryCommand,
+                                      Command="{Binding DataContext.OpenCommand,
                             RelativeSource={RelativeSource FindAncestor,
                             AncestorType=UserControl}}"
                                       CommandParameter="{Binding}"/>

@@ -17,29 +17,59 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
             }
         }
 
-        private DirectoryItem? selectedDirectory;
-        public DirectoryItem? SelectedDirectory
+        private IFile? fileService;
+        public IFile? FileService
         {
-            get => selectedDirectory; set
+            get => fileService; set
             {
-                Set(ref selectedDirectory, value);
+                Set(ref fileService, value);
             }
         }
 
-        public ICommand OpenDirectoryCommand => new RelayCommand(OpenDirectory, CanOpenDirectory);
-        private bool CanOpenDirectory(object? arg) =>
-            (SelectedDirectory != null && DirectoryService != null)
-            && DirectoryService.CanSelectDirectory(SelectedDirectory);
-        private void OpenDirectory(object? obj)
-        {
-            if (DirectoryService == null || SelectedDirectory == null) return;
+        private DirectoryItem? selectedItem;
 
-            DirectoryService.SelectDirectory(SelectedDirectory);
+        public DirectoryItem? SelectedItem
+        {
+            get => selectedItem; set
+            {
+                Set(ref selectedItem, value);
+            }
         }
 
-        public DirectoriesViewModel(IDirectory directoryService)
+        public ICommand OpenCommand => new RelayCommand(Open, CanOpen);
+        private bool CanOpen(object? arg)
+        {
+            if (SelectedItem == null) return false;
+
+            if (SelectedItem.Type == DirectoryItemType.ExcelFile && FileService != null)
+            {
+                return FileService.CanOpen(SelectedItem);
+            }
+            else if(DirectoryService != null)
+            {
+                return DirectoryService.CanSelectDirectory(SelectedItem);
+            }
+
+            return false;
+        }
+        private void Open(object? obj)
+        {
+            if (DirectoryService == null || SelectedItem == null || FileService == null) return;
+
+            if (SelectedItem.Type == DirectoryItemType.ExcelFile)
+            {
+                FileService.Open(SelectedItem);
+            }
+            else
+            {
+                DirectoryService.SelectDirectory(SelectedItem);
+            }
+        }
+
+        public DirectoriesViewModel(IDirectory directoryService, IFile? fileService)
         {
             DirectoryService = directoryService;
+            FileService = fileService;
         }
     }
 }
