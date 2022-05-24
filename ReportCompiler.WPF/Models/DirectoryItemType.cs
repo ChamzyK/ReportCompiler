@@ -4,7 +4,6 @@
     {
         ExcelFile,
         Directory,
-        ParentDirectory,
-        RootDirectory
+        ParentDirectory
     }
 }

@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using ReportCompiler.WPF.Models;
 using ReportCompiler.WPF.Services.Interfaces;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ReportCompiler.WPF.Services
 {
@@ -9,6 +12,7 @@ namespace ReportCompiler.WPF.Services
             .AddTransient<IUserDialog, UserDialogService>()
             .AddTransient<IDirectory, DirectoryService>()
             .AddSingleton<IExcelReportFormer, ExcelReportFormerService>()
+            .AddTransient<ICollection<DirectoryItem>, ObservableCollection<DirectoryItem>>()
         ;
     }
 }

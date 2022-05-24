@@ -27,36 +27,14 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         }
 
         public ICommand OpenDirectoryCommand => new RelayCommand(OpenDirectory, CanOpenDirectory);
-
         private bool CanOpenDirectory(object? arg) =>
             (SelectedDirectory != null && DirectoryService != null)
-            && DirectoryService.CanChangeDir(SelectedDirectory);
-
+            && DirectoryService.CanSelectDirectory(SelectedDirectory);
         private void OpenDirectory(object? obj)
         {
             if (DirectoryService == null || SelectedDirectory == null) return;
 
-            DirectoryService.ChangeDir(SelectedDirectory);
-        }
-
-
-
-
-
-        public ICommand CreateReportCommand => new RelayCommand(CreateReport, CanCreateReport);
-        private bool CanCreateReport(object? arg)
-        {
-            return SelectedDirectory != null && SelectedDirectory.Type == DirectoryItemType.Directory;
-        }
-        private void CreateReport(object? obj)
-        {
-            //var reporter = ReportFormerBuilder.GetReportFormer();
-
-            //if (DirectoryService != null && SelectedItem != null)
-            //{
-            //    var fullName = DirectoryService.GetFullName(SelectedItem);
-            //    reporter.GenerateReport(fullName);
-            //}
+            DirectoryService.SelectDirectory(SelectedDirectory);
         }
 
         public DirectoriesViewModel(IDirectory directoryService)

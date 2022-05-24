@@ -12,6 +12,5 @@
             Path = path;
             Type = type;
         }
-
     }
 }

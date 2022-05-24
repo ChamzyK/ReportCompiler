@@ -5,29 +5,34 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d">
     <ListView ItemsSource="{Binding DirectoryService.DirectoryContent}" 
-                  SelectedItem="{Binding SelectedDirectory}"
-                  Grid.Row="1">
+              SelectedItem="{Binding SelectedDirectory}">
+        
         <ListView.ItemTemplate>
             <DataTemplate>
                 <DockPanel>
+                    
                     <DockPanel.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick"
-                                          Command="{Binding DataContext.OpenDirectoryCommand,
-                                                   RelativeSource={RelativeSource FindAncestor,
-                                                   AncestorType=UserControl}}"
-                                          CommandParameter="{Binding}"/>
+                                      Command="{Binding DataContext.OpenDirectoryCommand,
+                            RelativeSource={RelativeSource FindAncestor,
+                            AncestorType=UserControl}}"
+                                      CommandParameter="{Binding}"/>
                     </DockPanel.InputBindings>
+                    
                     <ContentControl Content="{Binding Type, Converter={StaticResource PackIconConverter}}"
                                     DockPanel.Dock="Left"/>
                     <TextBlock Text="{Binding Name}"/>
+                    
                 </DockPanel>
             </DataTemplate>
         </ListView.ItemTemplate>
+        
         <ListView.ItemContainerStyle>
             <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 <Setter Property="VerticalContentAlignment" Value="Stretch"/>
             </Style>
         </ListView.ItemContainerStyle>
+        
     </ListView>
 </UserControl>

@@ -1,131 +1,77 @@
 ﻿using ReportCompiler.WPF.Models;
 using ReportCompiler.WPF.Services.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security;
 
 namespace ReportCompiler.WPF.Services
 {
     internal class DirectoryService : IDirectory
     {
         public IUserDialog UserDialog { get; set; }
-        private DirectoryInfo? currentDirectoryInfo;
-        private string? currentDirFullName;
+        public ICollection<DirectoryItem> DirectoryContent { get; }
+        public DirectoryInfo DirectoryInfo { get; private set; }
 
-        public ObservableCollection<DirectoryItem> DirectoryContent { get; }
-        public DirectoryInfo? CurrentDirInfo
+        public DirectoryService(IUserDialog userDialog, ICollection<DirectoryItem> directoryContent)
         {
-            get => currentDirectoryInfo; private set
-            {
-                currentDirectoryInfo = value;
-                UpdateContent();
-            }
-        }
-        public string CurrentDirFullName
-        {
-            get
-            {
-                return currentDirFullName;
-            }
-            set
-            {
-                var dirInfo = new DirectoryInfo(value);
-                currentDirFullName = value;
-                CurrentDirInfo = dirInfo;
-            }
-        }
-        public DirectoryInfo ParentInfo
-        {
-            get
-            {
-                return CurrentDirInfo.Parent;
-            }
-        }
-
-        public DirectoryService(IUserDialog userDialog)
-        {
-            DirectoryContent = new ObservableCollection<DirectoryItem>();
-            CurrentDirFullName = Directory.GetCurrentDirectory();
+            DirectoryInfo = new DirectoryInfo(Directory.GetCurrentDirectory());
             UserDialog = userDialog;
+            DirectoryContent = directoryContent;
         }
 
-        private void UpdateContent()
+        public bool SelectDirectory(DirectoryItem browserItem)
         {
-            DirectoryContent.Clear();
-
-            var parent = new DirectoryItem(ParentInfo.Name, ParentInfo.FullName, DirectoryItemType.ParentDirectory);
-            DirectoryContent.Add(parent);
-
             try
             {
-                AddFiles(Directories.Concat(ExcelFiles));
+                if (!Directory.Exists(browserItem.Path)) return false;
+                DirectoryInfo = new DirectoryInfo(browserItem.Path);
 
+                DirectoryContent.Clear();
+
+                AddParent();
+                AddItems(DirectoryNames, DirectoryItemType.Directory);
+                AddItems(ExcelFileNames, DirectoryItemType.ExcelFile);
+
+                return true;
             }
             catch (UnauthorizedAccessException e)
             {
-                UserDialog.ShowMessage("Ошибка", $"{e.Message}");
+                UserDialog.ShowMessage("Ошибка доступа", e.Message);
+                return false;
             }
-        }
-
-        private IEnumerable<DirectoryItem> Directories => Directory
-            .GetDirectories(CurrentDirFullName)
-            .Select(name => new DirectoryItem(
-                Path.GetFileName(name),
-                name,
-                DirectoryItemType.Directory))
-            ;
-
-        private IEnumerable<DirectoryItem> ExcelFiles => Directory
-            .GetFiles(CurrentDirFullName, "*.xls?")
-            .Select(name => new DirectoryItem(
-                Path.GetFileName(name),
-                name,
-                DirectoryItemType.ExcelFile))
-            ;
-
-        private void AddFiles(IEnumerable<DirectoryItem> files)
-        {
-            foreach (var file in files)
+            catch (SecurityException e)
             {
-                DirectoryContent.Add(file);
+                UserDialog.ShowMessage("Ошибка безопасности", e.Message);
+                return false;
             }
         }
+        public bool CanSelectDirectory(DirectoryItem browserItem) => Directory.Exists(browserItem.Path);
 
-        public void ChangeDir(DirectoryItem browserItem)
-        {
-            CurrentDirFullName = Path.Combine(CurrentDirFullName, browserItem.Name);
-        }
-        public bool CanChangeDir(DirectoryItem browserItem)
-        {
-            var dirName = browserItem.Name;
-            var dirFullName = Path.Combine(CurrentDirFullName, dirName);
-            var exists = Directory.Exists(dirFullName);
-            var contain = Directory.GetDirectories(CurrentDirFullName).Contains(dirFullName);
-            return exists && contain;
-        }
-        public void ChangeDirToParent()
-        {
-            CurrentDirFullName = ParentInfo.FullName;
-        }
-        public bool CanChangeDirToParent()
-        {
-            return ParentInfo != null;
-        }
+        private string[] DirectoryNames => Directory.GetDirectories(DirectoryInfo.FullName);
+        private string[] ExcelFileNames => Directory.GetFiles(DirectoryInfo.FullName, "*.xls?");
 
-        public bool IsParent(DirectoryItem browserItem)
+        private void AddParent()
         {
-            return browserItem.Name == "...";
+            if (DirectoryInfo == null || DirectoryInfo.Parent == null) return;
+
+            var name = DirectoryInfo.Parent.Name;
+            var path = DirectoryInfo.Parent.FullName;
+            var type = DirectoryItemType.ParentDirectory;
+
+            var parent = new DirectoryItem(name, path, type);
+            DirectoryContent.Add(parent);
         }
+        private void AddItems(string[] itemNames, DirectoryItemType itemsType)
+        {
+            var directoryItems = itemNames
+                .Select(name => new DirectoryItem(Path.GetFileName(name), name, itemsType));
 
-        public string GetFullName(DirectoryItem browserItem) =>
-            (browserItem != null && CurrentDirFullName != null)
-            ? Path.Combine(CurrentDirFullName, browserItem.Name)
-            : throw new ArgumentNullException(browserItem == null
-                ? nameof(browserItem)
-                : nameof(CurrentDirFullName));
-
+            foreach (var item in directoryItems)
+            {
+                DirectoryContent.Add(item);
+            }
+        }
     }
 }
