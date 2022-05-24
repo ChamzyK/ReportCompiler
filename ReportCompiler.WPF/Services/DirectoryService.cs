@@ -77,7 +77,7 @@ namespace ReportCompiler.WPF.Services
             }
         }
 
-        private void AddFiles(string[] filesName, bool isDirectory) //TODO:появились костыли и флаги
+        private void AddFiles(string[] filesName, bool isDirectory) //TODO: появились костыли и флаги
         {
             foreach (var fileName in filesName)
             {

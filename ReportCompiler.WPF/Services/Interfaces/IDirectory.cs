@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace ReportCompiler.WPF.Services.Interfaces
 {
-    internal interface IDirectory
+    internal interface IDirectory //TODO: неудачный сервис (неудобен в использовании, но работающий)
     {
         public ObservableCollection<DirectoryItem> DirectoryContent { get; }
 
@@ -13,7 +13,7 @@ namespace ReportCompiler.WPF.Services.Interfaces
         public void ChangeDirToParent();
         public bool CanChangeDirToParent();
 
-        public bool IsParent(DirectoryItem browserItem); //TODO: убрать 
+        public bool IsParent(DirectoryItem browserItem); 
         public string GetFullName(DirectoryItem browserItem);
     }
 }

@@ -1,5 +1,9 @@
-﻿using ReportCompiler.WPF.ViewModels.Base;
+﻿using ReportCompiler.WPF.Infrastructure.Commands;
+using ReportCompiler.WPF.Services.Interfaces;
+using ReportCompiler.WPF.ViewModels.Base;
 using ReportCompiler.WPF.ViewModels.UserControlViewModels;
+using System;
+using System.Windows.Input;
 
 namespace ReportCompiler.WPF.ViewModels
 {
@@ -14,33 +18,18 @@ namespace ReportCompiler.WPF.ViewModels
             }
         }
 
-        private readonly InfoViewModel? develeporInfoViewModel;
-        public InfoViewModel? DeveleporInfoViewModel
+        public IUserDialog UserDialog { get; init; }
+
+        public ICommand AboutProgramCommand => new RelayCommand(AboutProgram);
+        private void AboutProgram(object? obj)
         {
-            get => develeporInfoViewModel; init
-            {
-                develeporInfoViewModel = value;
-                if (develeporInfoViewModel != null)
-                {
-                    develeporInfoViewModel.Header = "О разработчике";
-                    develeporInfoViewModel.Information = "<Информация о разработчике>"; //TODO: добавить информацию о разработчике
-                }
-            }
+            UserDialog.ShowMessage("О программе", "<Информация о программе>");
         }
 
-        private readonly InfoViewModel? appInfoViewModel;
-        public InfoViewModel? AppInfoViewModel
+        public ICommand AboutDevCommand => new RelayCommand(AboutDev);
+        private void AboutDev(object? obj)
         {
-            get => appInfoViewModel;
-            init
-            {
-                appInfoViewModel = value;
-                if (appInfoViewModel != null)
-                {
-                    appInfoViewModel.Header = "О программе";
-                    appInfoViewModel.Information = "<Информация о программе>"; //TODO: добавить информацию о программе
-                }
-            }
+            UserDialog.ShowMessage("О разработчике", "<Информация о разработчике>");
         }
 
         private DirectoriesViewModel? directoriesViewModel;
@@ -53,10 +42,9 @@ namespace ReportCompiler.WPF.ViewModels
             }
         }
 
-        public MainViewModel(InfoViewModel appInfoViewModel, InfoViewModel develeporInfoViewModel, DirectoriesViewModel? directoriesViewModel)
+        public MainViewModel(IUserDialog userDialog, DirectoriesViewModel? directoriesViewModel)
         {
-            AppInfoViewModel = appInfoViewModel;
-            DeveleporInfoViewModel = develeporInfoViewModel;
+            UserDialog = userDialog;
             DirectoriesViewModel = directoriesViewModel;
         }
     }

@@ -64,7 +64,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
             //}
         }
 
-        public DirectoriesViewModel(IDirectory directoryService) //TODO: абстрагировать
+        public DirectoriesViewModel(IDirectory directoryService)
         {
             DirectoryService = directoryService;
         }

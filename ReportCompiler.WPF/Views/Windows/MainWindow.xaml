@@ -37,12 +37,10 @@
                 <Menu md:MenuAssist.TopLevelMenuItemHeight="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type md:Card}},Path=ActualHeight}">
 
                     <MenuItem Header="О программе"
-                              Command="{x:Static md:DialogHost.OpenDialogCommand}" 
-                              CommandParameter="{Binding AppInfoViewModel}"/>
+                              Command="{Binding AboutProgramCommand}"/>
 
                     <MenuItem Header="О разработчике" 
-                              Command="{x:Static md:DialogHost.OpenDialogCommand}" 
-                              CommandParameter="{Binding DeveleporInfoViewModel}"/>
+                              Command="{Binding AboutDevCommand}"/>
 
                     <MenuItem Header="Выход" 
                               Command="{StaticResource CloseWindowCommand}"/>
