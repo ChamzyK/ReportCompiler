@@ -2,8 +2,9 @@
 {
     internal enum DirectoryItemType
     {
-        Directory,
         ExcelFile,
-        RootDIrectory
+        Directory,
+        ParentDirectory,
+        RootDirectory
     }
 }

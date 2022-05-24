@@ -10,10 +10,6 @@ namespace ReportCompiler.WPF.Services.Interfaces
         public void ChangeDir(DirectoryItem browserItem);
         public bool CanChangeDir(DirectoryItem browserItem);
 
-        public void ChangeDirToParent();
-        public bool CanChangeDirToParent();
-
-        public bool IsParent(DirectoryItem browserItem); 
         public string GetFullName(DirectoryItem browserItem);
     }
 }

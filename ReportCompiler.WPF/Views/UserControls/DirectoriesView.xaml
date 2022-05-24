@@ -2,9 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ReportCompiler.WPF.Views.UserControls"
-             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d">
     <ListView ItemsSource="{Binding DirectoryService.DirectoryContent}" 
                   SelectedItem="{Binding SelectedDirectory}"
@@ -19,7 +17,8 @@
                                                    AncestorType=UserControl}}"
                                           CommandParameter="{Binding}"/>
                     </DockPanel.InputBindings>
-                    <md:PackIcon Kind="{Binding PackIconKind}" Margin="0,0,5,0" DockPanel.Dock="Left"/>
+                    <ContentControl Content="{Binding Type, Converter={StaticResource PackIconConverter}}"
+                                    DockPanel.Dock="Left"/>
                     <TextBlock Text="{Binding Name}"/>
                 </DockPanel>
             </DataTemplate>

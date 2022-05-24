@@ -1,12 +1,17 @@
-﻿using MaterialDesignThemes.Wpf;
-
-namespace ReportCompiler.WPF.Models
+﻿namespace ReportCompiler.WPF.Models
 {
     internal class DirectoryItem
     {
-        public string? Name { get; set; }
-        public bool IsDirectory { get; set; }
-        public PackIconKind PackIconKind => IsDirectory ? PackIconKind.Folder : PackIconKind.MicrosoftExcel;
-        
+        public string Name { get; init; }
+        public string Path { get; init; }
+        public DirectoryItemType Type { get; init; }
+
+        public DirectoryItem(string name, string path, DirectoryItemType type)
+        {
+            Name = name;
+            Path = path;
+            Type = type;
+        }
+
     }
 }

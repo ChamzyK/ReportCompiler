@@ -27,25 +27,16 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         }
 
         public ICommand OpenDirectoryCommand => new RelayCommand(OpenDirectory, CanOpenDirectory);
-        private bool CanOpenDirectory(object? arg)
-        {
-            return (SelectedDirectory != null && DirectoryService != null) &&
-                (!DirectoryService.IsParent(SelectedDirectory) && (DirectoryService.CanChangeDir(SelectedDirectory)) ||
-                (DirectoryService.IsParent(SelectedDirectory) && DirectoryService.CanChangeDirToParent()));
-        }
+
+        private bool CanOpenDirectory(object? arg) =>
+            (SelectedDirectory != null && DirectoryService != null)
+            && DirectoryService.CanChangeDir(SelectedDirectory);
+
         private void OpenDirectory(object? obj)
         {
-            if (DirectoryService != null && SelectedDirectory != null)
-            {
-                if (!DirectoryService.IsParent(SelectedDirectory))
-                {
-                    DirectoryService.ChangeDir(SelectedDirectory);
-                }
-                else
-                {
-                    DirectoryService.ChangeDirToParent();
-                }
-            }
+            if (DirectoryService == null || SelectedDirectory == null) return;
+
+            DirectoryService.ChangeDir(SelectedDirectory);
         }
 
 
@@ -55,7 +46,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         public ICommand CreateReportCommand => new RelayCommand(CreateReport, CanCreateReport);
         private bool CanCreateReport(object? arg)
         {
-            return SelectedDirectory != null && SelectedDirectory.IsDirectory;
+            return SelectedDirectory != null && SelectedDirectory.Type == DirectoryItemType.Directory;
         }
         private void CreateReport(object? obj)
         {

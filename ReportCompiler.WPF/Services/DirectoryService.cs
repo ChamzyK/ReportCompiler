@@ -1,6 +1,8 @@
 ﻿using ReportCompiler.WPF.Models;
 using ReportCompiler.WPF.Services.Interfaces;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -22,7 +24,7 @@ namespace ReportCompiler.WPF.Services
                 UpdateContent();
             }
         }
-        public string? CurrentDirFullName
+        public string CurrentDirFullName
         {
             get
             {
@@ -54,39 +56,41 @@ namespace ReportCompiler.WPF.Services
         {
             DirectoryContent.Clear();
 
-            var parent = new DirectoryItem
-            {
-                Name = "...",
-                IsDirectory = true
-            };
+            var parent = new DirectoryItem(ParentInfo.Name, ParentInfo.FullName, DirectoryItemType.ParentDirectory);
             DirectoryContent.Add(parent);
 
             try
             {
-
-                var directories = Directory.GetDirectories(CurrentDirFullName);
-                AddFiles(directories, true);
-
-                var excelFiles = Directory.GetFiles(CurrentDirFullName, "*.xls?");
-                AddFiles(excelFiles, false);
+                AddFiles(Directories.Concat(ExcelFiles));
 
             }
-            catch(UnauthorizedAccessException e)
+            catch (UnauthorizedAccessException e)
             {
                 UserDialog.ShowMessage("Ошибка", $"{e.Message}");
             }
         }
 
-        private void AddFiles(string[] filesName, bool isDirectory) //TODO: появились костыли и флаги
+        private IEnumerable<DirectoryItem> Directories => Directory
+            .GetDirectories(CurrentDirFullName)
+            .Select(name => new DirectoryItem(
+                Path.GetFileName(name),
+                name,
+                DirectoryItemType.Directory))
+            ;
+
+        private IEnumerable<DirectoryItem> ExcelFiles => Directory
+            .GetFiles(CurrentDirFullName, "*.xls?")
+            .Select(name => new DirectoryItem(
+                Path.GetFileName(name),
+                name,
+                DirectoryItemType.ExcelFile))
+            ;
+
+        private void AddFiles(IEnumerable<DirectoryItem> files)
         {
-            foreach (var fileName in filesName)
+            foreach (var file in files)
             {
-                var folderBrowserItem = new DirectoryItem
-                {
-                    Name = Path.GetFileName(fileName),
-                    IsDirectory = isDirectory
-                };
-                DirectoryContent.Add(folderBrowserItem);
+                DirectoryContent.Add(file);
             }
         }
 
@@ -116,20 +120,12 @@ namespace ReportCompiler.WPF.Services
             return browserItem.Name == "...";
         }
 
-        public string GetFullName(DirectoryItem browserItem)
-        {
-            if (browserItem == null)
-            {
-                throw new Exception("А здесь null почему то");
-            }
-            else if (!browserItem.IsDirectory)
-            {
-                throw new Exception("А здесь не директория, а файл");
-            }
-            else
-            {
-                return Path.Combine(CurrentDirFullName, browserItem.Name);
-            }
-        }
+        public string GetFullName(DirectoryItem browserItem) =>
+            (browserItem != null && CurrentDirFullName != null)
+            ? Path.Combine(CurrentDirFullName, browserItem.Name)
+            : throw new ArgumentNullException(browserItem == null
+                ? nameof(browserItem)
+                : nameof(CurrentDirFullName));
+
     }
 }
