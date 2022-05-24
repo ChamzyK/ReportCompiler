@@ -12,13 +12,14 @@ namespace ReportCompiler.WPF.Services
     {
         public IUserDialog UserDialog { get; set; }
         public ICollection<DirectoryItem> DirectoryContent { get; }
-        public DirectoryInfo DirectoryInfo { get; private set; }
+        public DirectoryInfo? DirectoryInfo { get; private set; }
 
-        public DirectoryService(IUserDialog userDialog, ICollection<DirectoryItem> directoryContent)
+        public DirectoryService(DirectoryItem directoryItem, IUserDialog userDialog, ICollection<DirectoryItem> directoryContent)
         {
-            DirectoryInfo = new DirectoryInfo(Directory.GetCurrentDirectory());
             UserDialog = userDialog;
             DirectoryContent = directoryContent;
+
+            SelectDirectory(directoryItem);
         }
 
         public bool SelectDirectory(DirectoryItem browserItem)
@@ -49,8 +50,12 @@ namespace ReportCompiler.WPF.Services
         }
         public bool CanSelectDirectory(DirectoryItem browserItem) => Directory.Exists(browserItem.Path);
 
-        private string[] DirectoryNames => Directory.GetDirectories(DirectoryInfo.FullName);
-        private string[] ExcelFileNames => Directory.GetFiles(DirectoryInfo.FullName, "*.xls?");
+        private string[] DirectoryNames => DirectoryInfo == null 
+            ? Array.Empty<string>() 
+            : Directory.GetDirectories(DirectoryInfo.FullName);
+        private string[] ExcelFileNames => DirectoryInfo == null 
+            ? Array.Empty<string>() 
+            : Directory.GetFiles(DirectoryInfo.FullName, "*.xls?");
 
         private void AddParent()
         {

@@ -3,6 +3,7 @@ using ReportCompiler.WPF.Models;
 using ReportCompiler.WPF.Services.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace ReportCompiler.WPF.Services
 {
@@ -13,6 +14,12 @@ namespace ReportCompiler.WPF.Services
             .AddTransient<IDirectory, DirectoryService>()
             .AddSingleton<IExcelReportFormer, ExcelReportFormerService>()
             .AddTransient<ICollection<DirectoryItem>, ObservableCollection<DirectoryItem>>()
+            .AddTransient(services =>
+            {
+                var currDir = Directory.GetCurrentDirectory();
+                var currDirInfo = new DirectoryInfo(currDir);
+                return new DirectoryItem(currDirInfo.Name, currDirInfo.FullName, DirectoryItemType.Directory);
+            })
         ;
     }
 }

@@ -3,52 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Тестовый проект" 
         Height="500" Width="500"
         Style="{DynamicResource MaterialDesignWindow}"
         WindowStartupLocation="CenterScreen">
-    <md:DialogHost>
-
-        <md:DialogHost.DialogContent>
-            <UniformGrid Columns="1" Margin="10" Width="250">
-                <TextBlock Text="Введите текст: " Margin="5"/>
-                <TextBox Margin="5" TextWrapping="Wrap"/>
-                <Button Content="Закрыть" Margin="5" Command="{x:Static md:DialogHost.CloseDialogCommand}"/>
-            </UniformGrid>
-        </md:DialogHost.DialogContent>
-
-        <DockPanel>
-            <Menu DockPanel.Dock="Top"
-              Margin="5">
-                <MenuItem Header="О программе" Command="{x:Static md:DialogHost.OpenDialogCommand}"/>
-                <MenuItem Header="О разработчике"/>
-                <MenuItem Header="Выход"/>
-            </Menu>
-
-            <DockPanel>
-                <UniformGrid DockPanel.Dock="Bottom" Rows="1">
-
-                    <Button Content="Проверить данные" Margin="5"/>
-
-                    <Button Content="Составить отчёт" Margin="5"/>
-
-                </UniformGrid>
-
-                <GroupBox Margin="5">
-                    <GroupBox.Header>
-                        <TextBlock Text="Выберите папку" FontSize="16"/>
-                    </GroupBox.Header>
-                    <ListBox>
-                        <ListBoxItem Content="Первый"/>
-                        <ListBoxItem Content="Второй"/>
-                        <ListBoxItem Content="Третий"/>
-                    </ListBox>
-                </GroupBox>
-
-            </DockPanel>
-
-        </DockPanel>
-    </md:DialogHost>
+    <Grid>
+        
+    </Grid>
 </Window>

@@ -20,9 +20,9 @@ namespace ReportCompiler.WPF.Infrastructure.Converters
 
         private PackIcon GetPackIconKind(DirectoryItemType type) => type switch
         {
-            DirectoryItemType.Directory => new PackIcon { Kind = PackIconKind.Folder, Margin = new Thickness(0, 0, 5, 0) },
-            DirectoryItemType.ExcelFile => new PackIcon { Kind = PackIconKind.MicrosoftExcel, Margin = new Thickness(0, 0, 5, 0) },
-            DirectoryItemType.ParentDirectory => new PackIcon { Kind = PackIconKind.FolderOpenOutline , Margin = new Thickness(10,0,5,0) },
+            DirectoryItemType.Directory => new PackIcon { Kind = PackIconKind.Folder, Margin = new Thickness(10, 0, 5, 0) },
+            DirectoryItemType.ExcelFile => new PackIcon { Kind = PackIconKind.MicrosoftExcel, Margin = new Thickness(10, 0, 5, 0) },
+            DirectoryItemType.ParentDirectory => new PackIcon { Kind = PackIconKind.FolderOpenOutline , Margin = new Thickness(0,0,5,0) },
             _ => throw new InvalidCastException("Не удалось выполнить преобразоввание.")
         };
     }
