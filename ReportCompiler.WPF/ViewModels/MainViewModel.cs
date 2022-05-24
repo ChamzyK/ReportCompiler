@@ -1,14 +1,11 @@
 ﻿using ReportCompiler.WPF.ViewModels.Base;
 using ReportCompiler.WPF.ViewModels.UserControlViewModels;
-using System;
 
 namespace ReportCompiler.WPF.ViewModels
 {
     internal class MainViewModel : ViewModelBase
     {
-        #region Свойство Title
         private string title = "Составитель отчётов";
-
         public string Title
         {
             get => title; set
@@ -16,7 +13,6 @@ namespace ReportCompiler.WPF.ViewModels
                 Set(ref title, value);
             }
         }
-        #endregion
 
         private readonly InfoViewModel? develeporInfoViewModel;
         public InfoViewModel? DeveleporInfoViewModel
@@ -47,10 +43,21 @@ namespace ReportCompiler.WPF.ViewModels
             }
         }
 
-        public MainViewModel(InfoViewModel appInfoViewModel, InfoViewModel develeporInfoViewModel)
+        private DirectoriesViewModel? directoriesViewModel;
+        public DirectoriesViewModel? DirectoriesViewModel
+        {
+            get => directoriesViewModel;
+            set
+            {
+                Set(ref directoriesViewModel, value);
+            }
+        }
+
+        public MainViewModel(InfoViewModel appInfoViewModel, InfoViewModel develeporInfoViewModel, DirectoriesViewModel? directoriesViewModel)
         {
             AppInfoViewModel = appInfoViewModel;
             DeveleporInfoViewModel = develeporInfoViewModel;
+            DirectoriesViewModel = directoriesViewModel;
         }
     }
 }

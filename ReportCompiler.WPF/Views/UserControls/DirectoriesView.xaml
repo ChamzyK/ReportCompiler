@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="ReportCompiler.WPF.Views.UserControls.DirectoriesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ReportCompiler.WPF.Views.UserControls"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d">
+    <ListView ItemsSource="{Binding DirectoryService.DirectoryContent}" 
+                  SelectedItem="{Binding SelectedDirectory}"
+                  Grid.Row="1">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick"
+                                          Command="{Binding DataContext.OpenDirectoryCommand,
+                                                   RelativeSource={RelativeSource FindAncestor,
+                                                   AncestorType=UserControl}}"
+                                          CommandParameter="{Binding}"/>
+                    </StackPanel.InputBindings>
+                    <md:PackIcon Kind="Folder" Margin="0,0,5,0"/>
+                    <TextBlock Text="{Binding Name}"/>
+                </StackPanel>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            </Style>
+        </ListView.ItemContainerStyle>
+    </ListView>
+</UserControl>

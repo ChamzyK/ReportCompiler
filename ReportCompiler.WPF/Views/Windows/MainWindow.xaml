@@ -59,13 +59,12 @@
 
                 <GroupBox Margin="5">
                     <GroupBox.Header>
-                        <TextBlock Text="Выберите папку" FontSize="16"/>
+                        <TextBlock Text="Выберите папку с отчетами" 
+                                   Style="{DynamicResource MaterialDesignHeadline6TextBlock}"/>
                     </GroupBox.Header>
-                    <ListBox>
-                        <ListBoxItem Content="Первый"/>
-                        <ListBoxItem Content="Второй"/>
-                        <ListBoxItem Content="Третий"/>
-                    </ListBox>
+
+                    <ucv:DirectoriesView DataContext="{Binding DirectoriesViewModel}"/>
+
                 </GroupBox>
 
             </DockPanel>

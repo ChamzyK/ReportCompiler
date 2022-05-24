@@ -7,6 +7,7 @@ namespace ReportCompiler.WPF.Services
     {
         public static IServiceCollection AddServices(this IServiceCollection services) => services
             .AddTransient<IUserDialog, UserDialogService>()
+            .AddTransient<IDirectory, DirectoryService>()
         ;
     }
 }
