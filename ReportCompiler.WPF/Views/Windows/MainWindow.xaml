@@ -8,8 +8,8 @@
         xmlns:ucv="clr-namespace:ReportCompiler.WPF.Views.UserControls"
         DataContext="{Binding Path=MainViewModel, Source={StaticResource Locator}}"
         Title="{Binding Title}"
-        Height="500" Width="500"
-        MinHeight="450" MinWidth="450"
+        Height="500" Width="550"
+        MinHeight="450" MinWidth="500"
         Style="{DynamicResource MaterialDesignWindow}"
         WindowStartupLocation="CenterScreen">
 
@@ -44,17 +44,18 @@
 
                     <MenuItem Header="Выход" 
                               Command="{StaticResource CloseWindowCommand}"/>
-
                 </Menu>
             </md:Card>
 
             <DockPanel>
 
                 <UniformGrid DockPanel.Dock="Bottom" Rows="1">
-                    <Button Content="Проверить данные"/>
+                    <Button Content="Проверить данные"
+                            Command="{Binding CheckDataCommand}"/>
                     <Button Content="Составить сводный отчет" 
-                            Command="{Binding CreateReportCommand}" 
-                            DataContext="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"/>
+                            Command="{Binding CreateReportCommand}"
+                            Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                            Margin="5"/>
                 </UniformGrid>
 
                 <GroupBox Margin="5">
@@ -64,9 +65,12 @@
                             <Run Text="{Binding DirectoriesViewModel.SelectedDirectory.Name}"/>
                         </TextBlock>
                     </GroupBox.Header>
-
-                    <ucv:DirectoriesView DataContext="{Binding DirectoriesViewModel}"/>
-
+                    <DockPanel>
+                        <Button DockPanel.Dock="Bottom"
+                                Content="Вернуться к папке приложения"
+                                Command="{DynamicResource AppDirectoryCommand}"/>
+                        <ucv:DirectoriesView DataContext="{Binding DirectoriesViewModel}"/>
+                    </DockPanel>
                 </GroupBox>
 
             </DockPanel>
