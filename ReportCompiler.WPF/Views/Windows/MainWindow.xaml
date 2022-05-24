@@ -6,7 +6,6 @@
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:ucvm="clr-namespace:ReportCompiler.WPF.ViewModels.UserControlViewModels"
         xmlns:ucv="clr-namespace:ReportCompiler.WPF.Views.UserControls"
-        
         DataContext="{Binding Path=MainViewModel, Source={StaticResource Locator}}"
         Title="{Binding Title}" 
         Height="500" Width="500"
@@ -19,7 +18,7 @@
             <Setter Property="Margin" Value="5"/>
         </Style>
     </Window.Resources>
-    
+
     <md:DialogHost>
 
         <md:DialogHost.DialogContentTemplate>
@@ -27,26 +26,29 @@
                 <ucv:InfoView/>
             </DataTemplate>
         </md:DialogHost.DialogContentTemplate>
-        
+
         <md:DialogHost.DialogContent>
             <ContentControl Content="{Binding}"/>
         </md:DialogHost.DialogContent>
-        
+
         <DockPanel>
-            <Menu DockPanel.Dock="Top">
-                
-                <MenuItem Header="О программе"
-                          Command="{x:Static md:DialogHost.OpenDialogCommand}" 
-                          CommandParameter="{Binding AppInfoViewModel}"/>
-                
-                <MenuItem Header="О разработчике" 
-                          Command="{x:Static md:DialogHost.OpenDialogCommand}" 
-                          CommandParameter="{Binding DeveleporInfoViewModel}"/>
-                
-                <MenuItem Header="Выход" 
-                          Command="{StaticResource CloseWindowCommand}"/>
-                
-            </Menu>
+            <md:Card DockPanel.Dock="Top" Margin="5"
+                     Background="{StaticResource PrimaryHueMidBrush}">
+                <Menu md:MenuAssist.TopLevelMenuItemHeight="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type md:Card}},Path=ActualHeight}">
+
+                    <MenuItem Header="О программе"
+                              Command="{x:Static md:DialogHost.OpenDialogCommand}" 
+                              CommandParameter="{Binding AppInfoViewModel}"/>
+
+                    <MenuItem Header="О разработчике" 
+                              Command="{x:Static md:DialogHost.OpenDialogCommand}" 
+                              CommandParameter="{Binding DeveleporInfoViewModel}"/>
+
+                    <MenuItem Header="Выход" 
+                              Command="{StaticResource CloseWindowCommand}"/>
+
+                </Menu>
+            </md:Card>
 
             <DockPanel>
 
@@ -69,6 +71,6 @@
             </DockPanel>
 
         </DockPanel>
-        
+
     </md:DialogHost>
 </Window>
