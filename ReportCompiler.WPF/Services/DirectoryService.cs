@@ -9,6 +9,7 @@ namespace ReportCompiler.WPF.Services
 {
     internal class DirectoryService : IDirectory
     {
+        public IUserDialog UserDialog { get; set; }
         private DirectoryInfo? currentDirectoryInfo;
         private string? currentDirFullName;
 
@@ -21,7 +22,7 @@ namespace ReportCompiler.WPF.Services
                 UpdateContent();
             }
         }
-        public string CurrentDirFullName
+        public string? CurrentDirFullName
         {
             get
             {
@@ -42,10 +43,11 @@ namespace ReportCompiler.WPF.Services
             }
         }
 
-        public DirectoryService()
+        public DirectoryService(IUserDialog userDialog)
         {
             DirectoryContent = new ObservableCollection<DirectoryItem>();
             CurrentDirFullName = Directory.GetCurrentDirectory();
+            UserDialog = userDialog;
         }
 
         private void UpdateContent()
@@ -59,11 +61,20 @@ namespace ReportCompiler.WPF.Services
             };
             DirectoryContent.Add(parent);
 
-            var directories = Directory.GetDirectories(CurrentDirFullName);
-            AddFiles(directories, true);
+            try
+            {
 
-            var excelFiles = Directory.GetFiles(CurrentDirFullName, "*.xls?");
-            AddFiles(excelFiles, false);
+                var directories = Directory.GetDirectories(CurrentDirFullName);
+                AddFiles(directories, true);
+
+                var excelFiles = Directory.GetFiles(CurrentDirFullName, "*.xls?");
+                AddFiles(excelFiles, false);
+
+            }
+            catch(UnauthorizedAccessException e)
+            {
+                UserDialog.ShowMessage("Ошибка", $"{e.Message}");
+            }
         }
 
         private void AddFiles(string[] filesName, bool isDirectory) //TODO:появились костыли и флаги

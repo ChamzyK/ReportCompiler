@@ -54,13 +54,17 @@
 
                 <UniformGrid DockPanel.Dock="Bottom" Rows="1">
                     <Button Content="Проверить данные"/>
-                    <Button Content="Составить отчёт"/>
+                    <Button Content="Составить сводный отчет" 
+                            Command="{Binding CreateReportCommand}" 
+                            DataContext="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"/>
                 </UniformGrid>
 
                 <GroupBox Margin="5">
                     <GroupBox.Header>
-                        <TextBlock Text="Выберите папку с отчетами" 
-                                   Style="{DynamicResource MaterialDesignHeadline6TextBlock}"/>
+                        <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}">
+                            <Run Text="Выбранный элемент: "/>
+                            <Run Text="{Binding DirectoriesViewModel.SelectedDirectory.Name}"/>
+                        </TextBlock>
                     </GroupBox.Header>
 
                     <ucv:DirectoriesView DataContext="{Binding DirectoriesViewModel}"/>

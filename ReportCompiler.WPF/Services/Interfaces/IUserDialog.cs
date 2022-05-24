@@ -2,5 +2,6 @@
 {
     internal interface IUserDialog
     {
+        void ShowMessage(string header, string message);
     }
 }

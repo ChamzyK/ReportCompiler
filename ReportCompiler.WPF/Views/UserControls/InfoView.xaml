@@ -11,7 +11,7 @@
         
         <Button Content="Закрыть"
                 DockPanel.Dock="Bottom"
-                Margin="0"
+                Margin="5"
                 Command="{x:Static md:DialogHost.CloseDialogCommand}"/>
         
         <GroupBox md:ShadowAssist.ShadowDepth="Depth3"

@@ -17,12 +17,12 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
             }
         }
 
-        private DirectoryItem? selectedItem;
+        private DirectoryItem? selectedDirectory;
         public DirectoryItem? SelectedDirectory
         {
-            get => selectedItem; set
+            get => selectedDirectory; set
             {
-                Set(ref selectedItem, value);
+                Set(ref selectedDirectory, value);
             }
         }
 
@@ -51,7 +51,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         public ICommand CreateReportCommand => new RelayCommand(CreateReport, CanCreateReport);
         private bool CanCreateReport(object? arg)
         {
-            return true;
+            return SelectedDirectory != null && SelectedDirectory.IsDirectory;
         }
         private void CreateReport(object? obj)
         {
