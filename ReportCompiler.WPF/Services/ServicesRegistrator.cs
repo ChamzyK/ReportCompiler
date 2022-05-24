@@ -14,6 +14,7 @@ namespace ReportCompiler.WPF.Services
             .AddTransient<IUserDialog, UserDialogService>()
             .AddTransient<IDirectory, DirectoryService>()
             .AddTransient<IFile, FileService>()
+            .AddSingleton<IReportFormer, ExcelReportFormer>()
             .AddTransient<ICollection<DirectoryItem>, ObservableCollection<DirectoryItem>>()
             .AddTransient(services =>
             {

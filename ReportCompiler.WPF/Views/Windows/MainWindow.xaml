@@ -51,10 +51,12 @@
 
                 <UniformGrid DockPanel.Dock="Bottom" Rows="1">
                     <Button Content="Проверить данные"
-                            Command="{Binding CheckDataCommand}"/>
+                            Command="{Binding CheckDataCommand}"
+                            CommandParameter="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"/>
                     <Button Content="Составить сводный отчет" 
                             Command="{Binding CreateReportCommand}"
                             Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                            CommandParameter="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"
                             Margin="5"/>
                 </UniformGrid>
 
@@ -62,14 +64,14 @@
                     <GroupBox.Header>
                         <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}">
                             <Run Text="Выбранный элемент: "/>
-                            <Run Text="{Binding DirectoriesViewModel.SelectedDirectory.Name}"/>
+                            <Run Text="{Binding Path=DirectoriesViewModel.SelectedItem.Name, Source={StaticResource Locator}}"/>
                         </TextBlock>
                     </GroupBox.Header>
                     <DockPanel>
                         <Button DockPanel.Dock="Bottom"
                                 Content="Вернуться к папке приложения"
                                 Command="{DynamicResource AppDirectoryCommand}"/>
-                        <ucv:DirectoriesView DataContext="{Binding DirectoriesViewModel}"/>
+                        <ucv:DirectoriesView DataContext="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"/>
                     </DockPanel>
                 </GroupBox>
 

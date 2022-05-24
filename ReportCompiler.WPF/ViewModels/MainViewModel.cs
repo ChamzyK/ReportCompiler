@@ -17,6 +17,7 @@ namespace ReportCompiler.WPF.ViewModels
             }
         }
 
+        public IReportFormer ReportFormer { get; init; }
         public IUserDialog UserDialog { get; init; }
 
         public ICommand AboutProgramCommand => new RelayCommand(AboutProgram);
@@ -31,20 +32,32 @@ namespace ReportCompiler.WPF.ViewModels
             UserDialog.ShowMessage("О разработчике", "<Информация о разработчике>");
         }
 
-        private DirectoriesViewModel? directoriesViewModel;
-        public DirectoriesViewModel? DirectoriesViewModel
+        public ICommand CheckDataCommand => new RelayCommand(CheckData, CanCheckData);
+        private bool CanCheckData(object? obj) => 
+            obj != null 
+            && (obj is DirectoriesViewModel dvm) 
+            && dvm.SelectedItem != null;
+        private void CheckData(object? obj)
         {
-            get => directoriesViewModel;
-            set
-            {
-                Set(ref directoriesViewModel, value);
-            }
+            var dvm = obj as DirectoriesViewModel;
+            ReportFormer.CheckData(dvm.SelectedItem.Path);
         }
 
-        public MainViewModel(IUserDialog userDialog, DirectoriesViewModel? directoriesViewModel)
+        public ICommand CreateReportCommand => new RelayCommand(CreateReport, CanCreateReport);
+        private bool CanCreateReport(object? obj) => 
+            obj != null 
+            && (obj is DirectoriesViewModel dvm) 
+            && dvm.SelectedItem != null;
+        private void CreateReport(object? obj)
+        {
+            var dvm = obj as DirectoriesViewModel;
+            ReportFormer.CretateMainReport(dvm.SelectedItem.Path);
+        }
+
+        public MainViewModel(IUserDialog userDialog, IReportFormer reportFormer)
         {
             UserDialog = userDialog;
-            DirectoriesViewModel = directoriesViewModel;
+            ReportFormer = reportFormer;
         }
     }
 }

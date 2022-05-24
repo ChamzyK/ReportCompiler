@@ -7,7 +7,7 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d">
 
-    <DockPanel Width="250" MaxHeight="400">
+    <DockPanel Width="350" MaxHeight="450">
         
         <Button Content="Закрыть"
                 DockPanel.Dock="Bottom"
