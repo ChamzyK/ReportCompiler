@@ -14,7 +14,6 @@ public static class Program
         }
     }
 
-    #region Работающие
     static List<FileInfo> GetFiles() => Directory.EnumerateFiles(Path
         .Combine(Environment.CurrentDirectory, "ReportsDir")) //для этого проекта созданы специальные тестовые файлы в директории ReportsDir
         .Where(path => !path.Contains("~$") && path.Contains("xlsx")) //выбор всех файлов в формате .xlsx кроме временных (~$)
@@ -36,7 +35,6 @@ public static class Program
     {
         return cell.Value != null && !string.IsNullOrWhiteSpace(cell.Value.ToString());
     }
-    #endregion
 
     static Report ConvertToReport(FileInfo fileInfo)
     {

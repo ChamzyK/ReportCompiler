@@ -51,7 +51,7 @@ namespace ReportCompiler.WPF.ViewModels
         private void CreateReport(object? obj)
         {
             var dvm = obj as DirectoriesViewModel;
-            ReportFormer.CretateMainReport(dvm.SelectedItem.Path);
+            ReportFormer.CreateMainReport(dvm.SelectedItem.Path);
         }
 
         public MainViewModel(IUserDialog userDialog, IReportFormer reportFormer)

@@ -3,6 +3,6 @@
     internal interface IReportFormer
     {
         bool CheckData(string path);
-        void CretateMainReport(string path);
+        void CreateMainReport(string path);
     }
 }
