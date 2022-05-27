@@ -33,10 +33,10 @@ namespace ReportCompiler.WPF.ViewModels
         }
 
         public ICommand CheckDataCommand => new RelayCommand(CheckData, CanCheckData);
-        private bool CanCheckData(object? obj) => 
-            obj != null 
-            && (obj is DirectoriesViewModel dvm) 
-            && dvm.SelectedItem != null;
+        private bool CanCheckData(object? obj) =>
+            obj != null
+            && (obj is DirectoriesViewModel dvm)
+            && dvm.SelectedItem != null && false; //TODO: временно отключил возможность проверки данных
         private void CheckData(object? obj)
         {
             var dvm = obj as DirectoriesViewModel;
