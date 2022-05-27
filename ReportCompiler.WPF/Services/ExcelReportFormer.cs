@@ -31,10 +31,12 @@ namespace ReportCompiler.WPF.Services
             CreateReport(reports, path);
         }
 
-        private static List<FileInfo> GetExcelFiles(string path)
-        {
-            return new DirectoryInfo(path).EnumerateFiles("*.xlsx").ToList();//TODO: дореализовать возможность работы с файлами *.xls
-        }
+        private static List<FileInfo> GetExcelFiles(string path) => Directory.EnumerateFiles(Path
+        .Combine(Environment.CurrentDirectory, path)) //для этого проекта созданы специальные тестовые файлы в директории ReportsDir
+        .Where(path => !path.Contains("~$") && path.Contains("xlsx")) //выбор всех файлов в формате .xlsx кроме временных (~$)
+        .Select(path => new FileInfo(path))
+        .ToList()
+        ;
 
         private List<Report> GetReports(List<FileInfo> excelFiles)
         {
@@ -162,7 +164,52 @@ namespace ReportCompiler.WPF.Services
 
         private void CreateReport(List<Report> reports, string path)
         {
+            var mainReportTemplate = new FileInfo("main_report_template.xltx");
 
+            var year = "2022";
+            var month = "декабрь";
+            var today = DateTime.Now;
+
+            var mainReport = new FileInfo($"Свод_отчет_{month} {year} усл_Сопровождения_сверка со Штайгер.xlsx");
+
+            using var writePackage = new ExcelPackage(mainReport, mainReportTemplate);
+
+            var sheet = writePackage.Workbook.Worksheets["Сводный отчет"];
+
+
+            var headRichText = sheet.Cells["A1"].RichText.Add("Информация о предоставлении ");
+            headRichText.Bold = false;
+            var boldRichText = sheet.Cells["A1"].RichText.Add("государственной услуги сопровождения");
+            boldRichText.Bold = true;
+            var tailRichText = sheet.Cells["A1"].RichText.Add($"\nпри содействии занятости инвалидов ГКУ ЦЗН НСО в {year} году");
+            tailRichText.Bold = false;
+
+
+            sheet.Cells["G2"].Value = $"Ежемесячно за {month}" +
+                "\nПредоставляется: до 5 числа месяца, следующего за отчетным";
+
+
+            var bold = sheet.Cells["G4"].RichText.Add(today.ToString("d"));
+            bold.Bold = true;
+
+            var normal = sheet.Cells["G4"].RichText.Add(" (нарастающим итогом)");
+            normal.Bold = false;
+
+            sheet.Cells["A40"].Value = $"за {year} год";
+            sheet.Cells["A40"].Style.Font.Bold = true;
+
+            sheet.Cells["A41"].Value = $"{today:Y}";
+            sheet.Cells["A41"].Style.Font.Bold = true;
+
+            sheet.Cells["J40"].Value = $"на {today.ToString("d")} проведено проверок";
+            sheet.Cells["J40"].Style.Font.Bold = true;
+
+            sheet.Cells["J42"].Value = $"на {today.ToString("d")} из МСЭ не пришли ответы  на запросы ЦЗН";
+            sheet.Cells["J42"].Style.Font.Bold = true;
+
+
+
+            writePackage.SaveAs(mainReport);
         }
     }
 }
