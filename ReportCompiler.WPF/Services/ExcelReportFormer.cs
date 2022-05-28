@@ -28,7 +28,7 @@ namespace ReportCompiler.WPF.Services
 
             var reports = GetReports(excelFiles);
 
-            CreateReport(reports, path);
+            CreateMainReport(reports, path);
         }
 
         private static List<FileInfo> GetExcelFiles(string path) => Directory.EnumerateFiles(Path
@@ -58,9 +58,58 @@ namespace ReportCompiler.WPF.Services
             return new Report
             {
                 Month = GetMonth(data),
-                District = district//Пока только определение месяца составления отчета и название района (города)
+                District = district,
+                TableData = GetTable(data)
             };
         }
+
+
+        #region Заполнение таблицы
+        private static Table GetTable(List<ExcelRangeBase> data)
+        {
+            var table = new Table
+            {
+                Declarations = GetDeclarationInTable(data),
+                IssuedOrders = GetIssuedOrdersInTable(data),
+                Agreements = GetAgreementsInTable(data),
+                RequestsSent = GetRequestsSentInTable(data),
+                RepliesReceviedNo = GetRepliesReceviedNoInTable(data),
+                RepliesReceviedYes = GetRepliesReceviedYesInTable(data),
+                Inspections = GetInspectionsInTable(data)
+            };
+
+            return table;
+        }
+
+        private static string GetInspectionsInTable(List<ExcelRangeBase> data)
+        {
+            return "Количество проведенных проверок соблюдения...";
+        }
+        private static string GetRepliesReceviedYesInTable(List<ExcelRangeBase> data)
+        {
+            return "Получено ответов из учреждений (да)...";
+        }
+        private static string GetRepliesReceviedNoInTable(List<ExcelRangeBase> data)
+        {
+            return "Получено ответов из учреждений (нет)...";
+        }
+        private static string GetRequestsSentInTable(List<ExcelRangeBase> data)
+        {
+            return "Направлено запросов в учреждения...";
+        }
+        private static string GetAgreementsInTable(List<ExcelRangeBase> data)
+        {
+            return "Заключено соглашений...";
+        }
+        private static string GetIssuedOrdersInTable(List<ExcelRangeBase> data)
+        {
+            return "Издано приказов ...";
+        }
+        private static string GetDeclarationInTable(List<ExcelRangeBase> data)
+        {
+            return "Поступило заявлений о предоставлении...";
+        } 
+        #endregion
 
         private static string GetDistrict(ExcelPackage readPackage)
         {
@@ -83,8 +132,8 @@ namespace ReportCompiler.WPF.Services
             "Кыштовка" => "Кыштовский",
             "Маслянино" => "Маслянинский",
             "Мошково" => "Мошковский",
-            "Новосибирск" => "г.Новосибирск",
-            "Новосибирский районx" => "Новосибирский",
+            "Новосибирск" => "г. Новосибирск",
+            "Новосибирский район" => "Новосибирский",
             "Ордынск" => "Ордынский",
             "Северный" => "Северный",
             "Сузун" => "Сузунский",
@@ -157,18 +206,13 @@ namespace ReportCompiler.WPF.Services
             return null;
         }
 
-        private Table GetTable(IEnumerable<ExcelRangeBase> data)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void CreateReport(List<Report> reports, string path)
+        private static void CreateMainReport(List<Report> reports, string path)
         {
             var mainReportTemplate = new FileInfo("main_report_template.xltx");
 
             var year = "2022";
             var month = "декабрь";
-            var today = DateTime.Now;
+            var today = DateTime.Now; //данные которые надо будет доставать откуда-то
 
             var mainReport = new FileInfo($"Свод_отчет_{month} {year} усл_Сопровождения_сверка со Штайгер.xlsx");
 
@@ -176,7 +220,55 @@ namespace ReportCompiler.WPF.Services
 
             var sheet = writePackage.Workbook.Worksheets["Сводный отчет"];
 
+            FillGeneralInfo(year, month, today, sheet);
 
+            FillDistrictInformation(reports, sheet);
+
+            writePackage.SaveAs(mainReport);
+        }
+
+        private static void FillDistrictInformation(List<Report> reports, ExcelWorksheet sheet)
+        {
+            var range = sheet.Cells["B7:B38"];
+
+            foreach (var cell in range)
+            {
+                var report = reports.FirstOrDefault(report => report.District.Equals(cell.Value.ToString()));
+                if (report != null)
+                {
+                    var row = cell.Start.Row;
+                    sheet.Cells[$"D{row}"].Value = report.TableData.Declarations;
+                    sheet.Cells[$"E{row}"].Value = report.TableData.IssuedOrders;
+                    sheet.Cells[$"F{row}"].Value = report.TableData.Agreements;
+                    sheet.Cells[$"G{row}"].Value = report.TableData.RequestsSent;
+                    sheet.Cells[$"H{row}"].Value = report.TableData.RepliesReceviedNo;
+                    sheet.Cells[$"I{row}"].Value = report.TableData.RepliesReceviedYes;
+                    sheet.Cells[$"J{row}"].Value = report.TableData.Inspections;
+                }
+            }
+        }
+
+        private static void FillGeneralInfo(string year, string month, DateTime today, ExcelWorksheet sheet)
+        {
+            FillHeaderGeneral(year, month, today, sheet);
+            FillBottomGeneral(year, today, sheet);
+        }
+        private static void FillBottomGeneral(string year, DateTime today, ExcelWorksheet sheet)
+        {
+            sheet.Cells["A40"].Value = $"за {year} год";
+            sheet.Cells["A40"].Style.Font.Bold = true;
+
+            sheet.Cells["A41"].Value = $"{today:Y}";
+            sheet.Cells["A41"].Style.Font.Bold = true;
+
+            sheet.Cells["J40"].Value = $"на {today:d} проведено проверок";
+            sheet.Cells["J40"].Style.Font.Bold = true;
+
+            sheet.Cells["J42"].Value = $"на {today:d} из МСЭ не пришли ответы  на запросы ЦЗН";
+            sheet.Cells["J42"].Style.Font.Bold = true;
+        }
+        private static void FillHeaderGeneral(string year, string month, DateTime today, ExcelWorksheet sheet)
+        {
             var headRichText = sheet.Cells["A1"].RichText.Add("Информация о предоставлении ");
             headRichText.Bold = false;
             var boldRichText = sheet.Cells["A1"].RichText.Add("государственной услуги сопровождения");
@@ -189,27 +281,11 @@ namespace ReportCompiler.WPF.Services
                 "\nПредоставляется: до 5 числа месяца, следующего за отчетным";
 
 
-            var bold = sheet.Cells["G4"].RichText.Add(today.ToString("d"));
+            var bold = sheet.Cells["G4"].RichText.Add($"{today:d}"); ;
             bold.Bold = true;
 
             var normal = sheet.Cells["G4"].RichText.Add(" (нарастающим итогом)");
             normal.Bold = false;
-
-            sheet.Cells["A40"].Value = $"за {year} год";
-            sheet.Cells["A40"].Style.Font.Bold = true;
-
-            sheet.Cells["A41"].Value = $"{today:Y}";
-            sheet.Cells["A41"].Style.Font.Bold = true;
-
-            sheet.Cells["J40"].Value = $"на {today.ToString("d")} проведено проверок";
-            sheet.Cells["J40"].Style.Font.Bold = true;
-
-            sheet.Cells["J42"].Value = $"на {today.ToString("d")} из МСЭ не пришли ответы  на запросы ЦЗН";
-            sheet.Cells["J42"].Style.Font.Bold = true;
-
-
-
-            writePackage.SaveAs(mainReport);
         }
     }
 }
