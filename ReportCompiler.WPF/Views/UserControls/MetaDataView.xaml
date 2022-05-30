@@ -10,13 +10,14 @@
             md:TextFieldAssist.HasClearButton="True"
             TextWrapping="Wrap"
             MaxLength="100"
-            Margin="0,0,0,10"/>
+            Margin="0,0,0,10"
+            Text="{Binding MainReportName, UpdateSourceTrigger=PropertyChanged}"/>
 
         <CheckBox 
             Content="Другая дата составления"
             x:Name="AnotherDateCheckBox"
             ToolTip="По умолчанию дата составления устанавливается сегодняшним днем"
-            IsChecked="False" 
+            IsChecked="{Binding IsAnotherDate}" 
             Margin="0,10,0,0"/>
 
         <DatePicker 
@@ -24,25 +25,23 @@
             md:TextFieldAssist.HasClearButton="True"
             Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
             Visibility="{Binding Path=IsChecked, ElementName=AnotherDateCheckBox, Converter={StaticResource BooleanToVisibility}}"
-            Margin="0,10"/>
+            Margin="0,10"
+            SelectedDate="{Binding CompileDate}"/>
 
         <CheckBox 
             Content="Другой месяц отчетности"
             x:Name="AnotherMonthCheckBox"
             ToolTip="По умолчанию месяц отчетности совпадает с месяцем составления"
-            IsChecked="False"
+            IsChecked="{Binding IsAnotherMonth}"
             Margin="0,10,0,0"/>
 
-        <ComboBox 
+        <ComboBox
             Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-            md:HintAssist.HelperText="Выберите месяц"
+            md:HintAssist.HelperText="Выбор месяца"
             md:HintAssist.Hint="Месяц"
-            Visibility="{Binding Path=IsChecked, ElementName=AnotherMonthCheckBox, Converter={StaticResource BooleanToVisibility}}">
-            <ComboBoxItem Content="Январь"/>
-            <ComboBoxItem Content="Февраль"/>
-            <ComboBoxItem Content="Март"/>
-            <ComboBoxItem Content="Апрель"/>
-        </ComboBox>
+            Visibility="{Binding Path=IsChecked, ElementName=AnotherMonthCheckBox, Converter={StaticResource BooleanToVisibility}}"
+            ItemsSource="{Binding Months}"
+            SelectedItem="{Binding SelectedMonth}"/>
 
     </StackPanel>
 </UserControl>

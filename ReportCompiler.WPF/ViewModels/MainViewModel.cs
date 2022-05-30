@@ -19,6 +19,7 @@ namespace ReportCompiler.WPF.ViewModels
 
         public IReportFormer ReportFormer { get; init; }
         public IUserDialog UserDialog { get; init; }
+        public MetaDataViewModel MetaDataViewModel { get; init; }
 
         public ICommand AboutProgramCommand => new RelayCommand(AboutProgram);
         private void AboutProgram(object? obj)
@@ -54,10 +55,11 @@ namespace ReportCompiler.WPF.ViewModels
             ReportFormer.CreateMainReport(dvm.SelectedItem.Path);
         }
 
-        public MainViewModel(IUserDialog userDialog, IReportFormer reportFormer)
+        public MainViewModel(IUserDialog userDialog, IReportFormer reportFormer, MetaDataViewModel metaDataViewModel)
         {
             UserDialog = userDialog;
             ReportFormer = reportFormer;
+            MetaDataViewModel = metaDataViewModel;
         }
     }
 }

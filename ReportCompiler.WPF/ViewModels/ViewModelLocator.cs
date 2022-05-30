@@ -8,5 +8,6 @@ namespace ReportCompiler.WPF.ViewModels
         public MainViewModel MainViewModel => App.Services.GetRequiredService<MainViewModel>();
         public InfoViewModel InfoViewModel => App.Services.GetRequiredService<InfoViewModel>();
         public DirectoriesViewModel DirectoriesViewModel => App.Services.GetRequiredService<DirectoriesViewModel>();
+        public MetaDataViewModel MetaDataViewModel => App.Services.GetRequiredService<MetaDataViewModel>();
     }
 }

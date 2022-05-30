@@ -80,7 +80,7 @@
                                 Text="Заполнение данных"/>
                         </GroupBox.Header>
 
-                        <ucv:MetaDataView/>
+                        <ucv:MetaDataView DataContext="{Binding MetaDataViewModel}"/>
 
                     </GroupBox>
 
