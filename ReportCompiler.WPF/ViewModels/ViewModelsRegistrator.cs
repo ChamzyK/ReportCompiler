@@ -10,6 +10,7 @@ namespace ReportCompiler.WPF.ViewModels
             .AddTransient<InfoViewModel>()
             .AddSingleton<DirectoriesViewModel>()
             .AddSingleton<MetaDataViewModel>()
+            .AddSingleton<MenuViewModel>()
         ;
     }
 }

@@ -40,7 +40,7 @@
                         HorizontalAlignment="Right"
                         IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"
                         DockPanel.Dock="Top"/>
-                    <ucv:MenuView/>
+                    <ucv:MenuView DataContext="{Binding MenuViewModel}"/>
                 </DockPanel>
             </md:DrawerHost.LeftDrawerContent>
 

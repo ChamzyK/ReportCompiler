@@ -18,20 +18,8 @@ namespace ReportCompiler.WPF.ViewModels
         }
 
         public IReportFormer ReportFormer { get; init; }
-        public IUserDialog UserDialog { get; init; }
         public MetaDataViewModel MetaDataViewModel { get; init; }
-
-        public ICommand AboutProgramCommand => new RelayCommand(AboutProgram);
-        private void AboutProgram(object? obj)
-        {
-            UserDialog.ShowMessage("О программе", "<Информация о программе>");
-        }
-
-        public ICommand AboutDevCommand => new RelayCommand(AboutDev);
-        private void AboutDev(object? obj)
-        {
-            UserDialog.ShowMessage("О разработчике", "<Информация о разработчике>");
-        }
+        public MenuViewModel MenuViewModel { get; init; }
 
         public ICommand CheckDataCommand => new RelayCommand(CheckData, CanCheckData);
         private bool CanCheckData(object? obj) =>
@@ -55,11 +43,11 @@ namespace ReportCompiler.WPF.ViewModels
             ReportFormer.CreateMainReport(dvm.SelectedItem.Path);
         }
 
-        public MainViewModel(IUserDialog userDialog, IReportFormer reportFormer, MetaDataViewModel metaDataViewModel)
+        public MainViewModel(IReportFormer reportFormer, MetaDataViewModel metaDataViewModel, MenuViewModel menuViewModel)
         {
-            UserDialog = userDialog;
             ReportFormer = reportFormer;
             MetaDataViewModel = metaDataViewModel;
+            MenuViewModel = menuViewModel;
         }
     }
 }
