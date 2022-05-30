@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="ReportCompiler.WPF.Views.UserControls.MetaDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <StackPanel MaxWidth="225">
+
+        <TextBox
+            md:HintAssist.Hint="Название сводного отчета"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+            md:TextFieldAssist.HasClearButton="True"
+            TextWrapping="Wrap"
+            MaxLength="100"
+            Margin="0,0,0,10"/>
+
+        <CheckBox 
+            Content="Другая дата составления"
+            x:Name="AnotherDateCheckBox"
+            ToolTip="По умолчанию дата составления устанавливается сегодняшним днем"
+            IsChecked="False" 
+            Margin="0,10,0,0"/>
+
+        <DatePicker 
+            md:HintAssist.Hint="Дата составления"
+            md:TextFieldAssist.HasClearButton="True"
+            Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+            Visibility="{Binding Path=IsChecked, ElementName=AnotherDateCheckBox, Converter={StaticResource BooleanToVisibility}}"
+            Margin="0,10"/>
+
+        <CheckBox 
+            Content="Другой месяц отчетности"
+            x:Name="AnotherMonthCheckBox"
+            ToolTip="По умолчанию месяц отчетности совпадает с месяцем составления"
+            IsChecked="False"
+            Margin="0,10,0,0"/>
+
+        <ComboBox 
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            md:HintAssist.HelperText="Выберите месяц"
+            md:HintAssist.Hint="Месяц"
+            Visibility="{Binding Path=IsChecked, ElementName=AnotherMonthCheckBox, Converter={StaticResource BooleanToVisibility}}">
+            <ComboBoxItem Content="Январь"/>
+            <ComboBoxItem Content="Февраль"/>
+            <ComboBoxItem Content="Март"/>
+            <ComboBoxItem Content="Апрель"/>
+        </ComboBox>
+
+    </StackPanel>
+</UserControl>
