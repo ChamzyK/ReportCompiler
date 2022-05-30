@@ -8,8 +8,8 @@
         xmlns:ucv="clr-namespace:ReportCompiler.WPF.Views.UserControls"
         DataContext="{Binding Path=MainViewModel, Source={StaticResource Locator}}"
         Title="{Binding Title}"
-        Height="500" Width="550"
-        MinHeight="450" MinWidth="500"
+        Height="575" Width="775"
+        MinHeight="500" MinWidth="725"
         Style="{DynamicResource MaterialDesignWindow}"
         WindowStartupLocation="CenterScreen">
 
@@ -32,15 +32,22 @@
         </md:DialogHost.DialogContent>
 
         <DockPanel>
-            <md:Card DockPanel.Dock="Top" Margin="5"
+            <md:Card DockPanel.Dock="Top" 
+                     Margin="5"
                      Background="{StaticResource PrimaryHueMidBrush}">
                 <Menu md:MenuAssist.TopLevelMenuItemHeight="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type md:Card}},Path=ActualHeight}">
 
-                    <MenuItem Header="О программе"
-                              Command="{Binding AboutProgramCommand}"/>
+                    <MenuItem Header="Шаблон отчета"
+                              Command="{Binding OpenReportTemplateCommand}"/>
+                    <MenuItem Header="Руководство пользователя"
+                              Command="{Binding OpenManualCommand}"/>
 
-                    <MenuItem Header="О разработчике" 
+                    <MenuItem Header="Справка">
+                        <MenuItem Header="О программе"
+                              Command="{Binding AboutProgramCommand}"/>
+                        <MenuItem Header="О разработчике" 
                               Command="{Binding AboutDevCommand}"/>
+                    </MenuItem>
 
                     <MenuItem Header="Выход" 
                               Command="{StaticResource CloseWindowCommand}"/>
@@ -60,19 +67,44 @@
                             Margin="5"/>
                 </UniformGrid>
 
-                <GroupBox Margin="5">
+                <GroupBox DockPanel.Dock="Left"
+                          Margin="5">
                     <GroupBox.Header>
                         <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}">
-                            <Run Text="Выбранный элемент: "/>
-                            <Run Text="{Binding Path=DirectoriesViewModel.SelectedItem.Name, Source={StaticResource Locator}}"/>
+                            <Run Text="Заполните данные: "/>
                         </TextBlock>
                     </GroupBox.Header>
-                    <DockPanel>
-                        <Button DockPanel.Dock="Bottom"
-                                Content="Вернуться к папке приложения"
-                                Command="{DynamicResource AppDirectoryCommand}"/>
-                        <ucv:DirectoriesView DataContext="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"/>
-                    </DockPanel>
+                </GroupBox>
+
+                <GroupBox Margin="5">
+                    <GroupBox.Header>
+                        <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}"
+                                   Text="Выберите папку с отчетами: "/>
+                    </GroupBox.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="65"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="65"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                ToolTip="Вернуться в папку с приложением"
+                                Panel.ZIndex="9999"
+                                Command="{DynamicResource AppDirectoryCommand}"
+                                Content="{md:PackIcon Home}"/>
+                        <ucv:DirectoriesView DataContext="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"
+                                             Grid.RowSpan="2"
+                                             Grid.ColumnSpan="2"/>
+                    </Grid>
                 </GroupBox>
 
             </DockPanel>
