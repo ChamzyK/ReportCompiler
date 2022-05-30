@@ -8,10 +8,10 @@
         xmlns:ucv="clr-namespace:ReportCompiler.WPF.Views.UserControls"
         DataContext="{Binding Path=MainViewModel, Source={StaticResource Locator}}"
         Title="{Binding Title}"
-        Height="575" Width="775"
-        MinHeight="500" MinWidth="725"
-        Style="{DynamicResource MaterialDesignWindow}"
-        WindowStartupLocation="CenterScreen">
+        Height="575" Width="725"
+        MinHeight="500" MinWidth="675"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource MaterialDesignWindow}">
 
     <Window.Resources>
         <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
@@ -34,111 +34,146 @@
             <ContentControl Content="{Binding}"/>
         </md:DialogHost.DialogContent>
 
-        <DockPanel>
-            <md:Card DockPanel.Dock="Top" 
-                     Margin="5"
-                     Background="{StaticResource PrimaryHueMidBrush}">
-                <Menu md:MenuAssist.TopLevelMenuItemHeight="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type md:Card}},Path=ActualHeight}">
+        <Grid>
+            <md:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+                <md:DrawerHost.LeftDrawerContent>
+                    <DockPanel>
+                        <Button Content="{md:PackIcon Kind=Github,Size=20}"
+                                Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                                Margin="5"
+                                HorizontalAlignment="Right"
+                                DockPanel.Dock="Bottom"/>
+                        <StackPanel>
+                            <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                                      HorizontalAlignment="Right"
+                                      IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"/>
+                            <TextBlock Text="Меню"
+                                   Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Margin="5"/>
+                            <Separator Margin="5,0"/>
+                            <Button Content="Шаблон отчета"
+                                Command="{Binding OpenReportTemplateCommand}"/>
+                            <Button Content="Руководство пользователя"
+                                Command="{Binding OpenManualCommand}"/>
+                            <Separator Margin="5,0"/>
+                            <Button Content="О программе"
+                                Command="{Binding AboutProgramCommand}"/>
+                            <Button Content="О разработчике" 
+                                Command="{Binding AboutDevCommand}"/>
+                            <Separator Margin="5,0"/>
+                            <Button Content="Закрыть приложение"
+                                Command="{StaticResource CloseWindowCommand}"/>
+                        </StackPanel>
+                    </DockPanel>
+                </md:DrawerHost.LeftDrawerContent>
 
-                    <MenuItem Header="Шаблон отчета"
-                              Command="{Binding OpenReportTemplateCommand}"/>
-                    <MenuItem Header="Руководство пользователя"
-                              Command="{Binding OpenManualCommand}"/>
+                <DockPanel>
 
-                    <MenuItem Header="Справка">
-                        <MenuItem Header="О программе"
-                              Command="{Binding AboutProgramCommand}"/>
-                        <MenuItem Header="О разработчике" 
-                              Command="{Binding AboutDevCommand}"/>
-                    </MenuItem>
+                    <DockPanel DockPanel.Dock="Top">
 
-                    <MenuItem Header="Выход" 
-                              Command="{StaticResource CloseWindowCommand}"/>
-                </Menu>
-            </md:Card>
-            <DockPanel>
+                        <ToggleButton x:Name="MenuToggleButton"
+                                      Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                                      IsChecked="False"
+                                      DockPanel.Dock="Left"
+                                      Margin="10"/>
 
-                <UniformGrid DockPanel.Dock="Bottom" Rows="1">
-                    <Button Content="Проверить данные"
+
+                        <TextBlock Text="Составление сводного отчета"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Style="{StaticResource MaterialDesignHeadline5TextBlock}"/>
+
+
+                    </DockPanel>
+
+
+                    <DockPanel DockPanel.Dock="Right">
+
+                        <UniformGrid DockPanel.Dock="Bottom" Columns="1">
+                            <Button Content="Проверить данные"
                             Command="{Binding CheckDataCommand}"
                             CommandParameter="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"/>
-                    <Button Content="Составить сводный отчет" 
+                            <Button Content="Составить сводный отчет" 
                             Command="{Binding CreateReportCommand}"
                             Style="{StaticResource MaterialDesignRaisedDarkButton}"
                             CommandParameter="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"
                             Margin="5"/>
-                </UniformGrid>
+                        </UniformGrid>
 
-                <GroupBox DockPanel.Dock="Left">
-                    <GroupBox.Header>
-                        <TextBlock Style="{DynamicResource MaterialDesignSubtitle2TextBlock}">
+                        <GroupBox>
+                            <GroupBox.Header>
+                                <TextBlock Style="{DynamicResource MaterialDesignSubtitle2TextBlock}">
                             <Run Text="Заполнение данных"/>
-                        </TextBlock>
-                    </GroupBox.Header>
+                                </TextBlock>
+                            </GroupBox.Header>
 
-                    <StackPanel MaxWidth="200">
+                            <StackPanel MaxWidth="225">
 
-                        <TextBox md:HintAssist.Hint="Название сводного отчета"
+                                <TextBox md:HintAssist.Hint="Название сводного отчета"
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                  md:TextFieldAssist.HasClearButton="True"
                                  TextWrapping="Wrap"
                                  MaxLength="100"
                                  Margin="0,10"/>
 
-                        <CheckBox Content="Другая дата составления"
+                                <CheckBox Content="Другая дата составления"
                                   x:Name="AnotherDateCheckBox"
                                   ToolTip="По умолчанию дата составления устанавливается сегодняшним днем"
                                   IsChecked="False" 
                                   Margin="0,10,0,0"/>
-                        
-                        <DatePicker md:HintAssist.Hint="Дата составления"
+
+                                <DatePicker md:HintAssist.Hint="Дата составления"
                                     md:TextFieldAssist.HasClearButton="True"
                                     Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
                                     Visibility="{Binding Path=IsChecked, ElementName=AnotherDateCheckBox, Converter={StaticResource BooleanToVisibility}}"
                                     Margin="0,10"/>
 
-                        <CheckBox Content="Другой месяц отчетности"
+                                <CheckBox Content="Другой месяц отчетности"
                                   x:Name="AnotherMonthCheckBox"
                                   ToolTip="По умолчанию месяц отчетности совпадает с месяцем составления"
                                   IsChecked="False"
                                   Margin="0,10,0,0"/>
 
-                        <ComboBox Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                <ComboBox Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   md:HintAssist.HelperText="Выберите месяц"
                                   md:HintAssist.Hint="Месяц"
                                   Visibility="{Binding Path=IsChecked, ElementName=AnotherMonthCheckBox, Converter={StaticResource BooleanToVisibility}}">
-                            <ComboBoxItem
+                                    <ComboBoxItem
                                 Content="Январь"/>
-                            <ComboBoxItem
+                                    <ComboBoxItem
                                 Content="Февраль"/>
-                            <ComboBoxItem
+                                    <ComboBoxItem
                                 Content="Март"/>
-                            <ComboBoxItem
+                                    <ComboBoxItem
                                 Content="Апрель"/>
-                        </ComboBox>
+                                </ComboBox>
 
-                    </StackPanel>
+                            </StackPanel>
 
-                </GroupBox>
+                        </GroupBox>
 
-                <GroupBox>
-                    <GroupBox.Header>
-                        <TextBlock Style="{DynamicResource MaterialDesignSubtitle2TextBlock}"
+                    </DockPanel>
+
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <TextBlock Style="{DynamicResource MaterialDesignSubtitle2TextBlock}"
                                    Text="Выбор папки с отчетами"/>
-                    </GroupBox.Header>
+                        </GroupBox.Header>
 
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="65"/>
-                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="65"/>
+                            </Grid.RowDefinitions>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="65"/>
-                        </Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="65"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Button Grid.Row="1"
+                            <Button Grid.Row="1"
                                 Grid.Column="1"
                                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                                 HorizontalAlignment="Left"
@@ -146,18 +181,21 @@
                                 ToolTip="Вернуться в папку с приложением"
                                 Panel.ZIndex="9999"
                                 Command="{DynamicResource AppDirectoryCommand}"
-                                Content="{md:PackIcon Home}"/>
+                                Content="{md:PackIcon Home, Size=20}"/>
 
-                        <ucv:DirectoriesView DataContext="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"
+                            <ucv:DirectoriesView DataContext="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"
                                              Grid.RowSpan="2"
                                              Grid.ColumnSpan="2"/>
-                    </Grid>
+                        </Grid>
 
-                </GroupBox>
+                    </GroupBox>
 
-            </DockPanel>
+                </DockPanel>
 
-        </DockPanel>
+            </md:DrawerHost>
+        </Grid>
+
+
 
     </md:DialogHost>
 </Window>
