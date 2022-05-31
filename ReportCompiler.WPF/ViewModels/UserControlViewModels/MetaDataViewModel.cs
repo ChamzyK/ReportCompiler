@@ -1,4 +1,5 @@
-﻿using ReportCompiler.WPF.ViewModels.Base;
+﻿using ReportCompiler.WPF.Models.Reports;
+using ReportCompiler.WPF.ViewModels.Base;
 using System;
 
 namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
@@ -47,6 +48,28 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
             get => compileDate; set
             {
                 Set(ref compileDate, value);
+            }
+        }
+
+        public bool IsValidMetaData
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(MainReportName) &&
+                    (!IsAnotherDate || CompileDate != null) &&
+                    (!IsAnotherMonth || SelectedMonth != null);
+            }
+        }
+        public MetaData MetaData
+        {
+            get
+            {
+                return new MetaData
+                {
+                    CompileDate = IsAnotherDate && CompileDate != null ? (DateTime)CompileDate : DateTime.Now,
+                    Month = IsAnotherMonth && SelectedMonth != null ? SelectedMonth : DateTime.Now.ToString("MMMM"),
+                    MainReportName = MainReportName ?? $"Сводный отчет за {DateTime.Now:MMMM}"
+                };
             }
         }
 

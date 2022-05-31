@@ -5,9 +5,7 @@ namespace ReportCompiler.WPF.ViewModels
 {
     internal class ViewModelLocator
     {
-        public MainViewModel MainViewModel => App.Services.GetRequiredService<MainViewModel>();
-        public InfoViewModel InfoViewModel => App.Services.GetRequiredService<InfoViewModel>();
-        public DirectoriesViewModel DirectoriesViewModel => App.Services.GetRequiredService<DirectoriesViewModel>();
-        public MetaDataViewModel MetaDataViewModel => App.Services.GetRequiredService<MetaDataViewModel>();
+        public static MainViewModel MainViewModel => App.Services.GetRequiredService<MainViewModel>();
+        public static MenuViewModel MenuViewModel => App.Services.GetRequiredService<MenuViewModel>();
     }
 }

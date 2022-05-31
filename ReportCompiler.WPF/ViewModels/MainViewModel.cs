@@ -8,7 +8,7 @@ namespace ReportCompiler.WPF.ViewModels
 {
     internal class MainViewModel : ViewModelBase
     {
-        private string title = "Составитель отчётов";
+        private string title = "Summary report compiler";
         public string Title
         {
             get => title; set
@@ -17,37 +17,27 @@ namespace ReportCompiler.WPF.ViewModels
             }
         }
 
-        public IReportFormer ReportFormer { get; init; }
         public MetaDataViewModel MetaDataViewModel { get; init; }
-        public MenuViewModel MenuViewModel { get; init; }
+        public DirectoriesViewModel DirectoriesViewModel { get; init; }
+        public IReportFormer ReportFormer { get; init; }
 
-        public ICommand CheckDataCommand => new RelayCommand(CheckData, CanCheckData);
-        private bool CanCheckData(object? obj) =>
-            obj != null
-            && (obj is DirectoriesViewModel dvm)
-            && dvm.SelectedItem != null && false; //TODO: временно отключил возможность проверки данных
-        private void CheckData(object? obj)
+        public ICommand CreateReportCommand { get; init; }
+        private bool CanCreateReport(object? arg)
         {
-            var dvm = obj as DirectoriesViewModel;
-            ReportFormer.CheckData(dvm.SelectedItem.Path);
+            return DirectoriesViewModel.IsDirectorySelected && MetaDataViewModel.IsValidMetaData;
         }
-
-        public ICommand CreateReportCommand => new RelayCommand(CreateReport, CanCreateReport);
-        private bool CanCreateReport(object? obj) => 
-            obj != null 
-            && (obj is DirectoriesViewModel dvm) 
-            && dvm.SelectedItem != null;
         private void CreateReport(object? obj)
         {
-            var dvm = obj as DirectoriesViewModel;
-            ReportFormer.CreateMainReport(dvm.SelectedItem.Path);
+            ReportFormer.CreateMainReport(DirectoriesViewModel.SelectedItem.Path, MetaDataViewModel.MetaData);
         }
 
-        public MainViewModel(IReportFormer reportFormer, MetaDataViewModel metaDataViewModel, MenuViewModel menuViewModel)
+        public MainViewModel(MetaDataViewModel metaDataViewModel, DirectoriesViewModel directoriesViewModel, IReportFormer reportFormer)
         {
-            ReportFormer = reportFormer;
             MetaDataViewModel = metaDataViewModel;
-            MenuViewModel = menuViewModel;
+            DirectoriesViewModel = directoriesViewModel;
+            ReportFormer = reportFormer;
+
+            CreateReportCommand = new RelayCommand(CreateReport, CanCreateReport);
         }
     }
 }

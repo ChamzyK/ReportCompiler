@@ -6,7 +6,7 @@
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:ucvm="clr-namespace:ReportCompiler.WPF.ViewModels.UserControlViewModels"
         xmlns:ucv="clr-namespace:ReportCompiler.WPF.Views.UserControls"
-        DataContext="{Binding Path=MainViewModel, Source={StaticResource Locator}}"
+        DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
         Title="{Binding Title}"
         Height="575" Width="725"
         MinHeight="500" MinWidth="675"
@@ -35,12 +35,12 @@
         <md:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
             <md:DrawerHost.LeftDrawerContent>
                 <DockPanel>
-                    <ToggleButton 
+                    <ToggleButton
                         Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                         HorizontalAlignment="Right"
                         IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"
                         DockPanel.Dock="Top"/>
-                    <ucv:MenuView DataContext="{Binding MenuViewModel}"/>
+                    <ucv:MenuView DataContext="{Binding Source={StaticResource Locator}, Path=MenuViewModel}"/>
                 </DockPanel>
             </md:DrawerHost.LeftDrawerContent>
 
@@ -60,22 +60,14 @@
                 </DockPanel>
                 <DockPanel DockPanel.Dock="Right">
 
-                    <UniformGrid 
-                        DockPanel.Dock="Bottom" 
-                        Columns="1">
-                        <Button 
-                            Content="Проверить данные"
-                            Command="{Binding CheckDataCommand}"
-                            CommandParameter="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"/>
-                        <Button 
-                            Content="Составить сводный отчет" 
-                            Command="{Binding CreateReportCommand}"
-                            CommandParameter="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"/>
-                    </UniformGrid>
+                    <Button 
+                        DockPanel.Dock="Bottom"
+                        Content="Составить сводный отчет" 
+                        Command="{Binding CreateReportCommand}"/>
 
                     <GroupBox>
                         <GroupBox.Header>
-                            <TextBlock 
+                            <TextBlock
                                 Style="{DynamicResource MaterialDesignSubtitle2TextBlock}"
                                 Text="Заполнение данных"/>
                         </GroupBox.Header>
@@ -92,11 +84,11 @@
                             Text="Выбор папки с отчетами"/>
                     </GroupBox.Header>
 
-                    <ucv:DirectoriesView DataContext="{Binding Path=DirectoriesViewModel, Source={StaticResource Locator}}"/>
+                    <ucv:DirectoriesView DataContext="{Binding DirectoriesViewModel}"/>
 
                 </GroupBox>
             </DockPanel>
-            
+
         </md:DrawerHost>
     </md:DialogHost>
 

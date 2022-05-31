@@ -22,7 +22,7 @@ namespace ReportCompiler.WPF.Services
             return false;
         }
 
-        public void CreateMainReport(string path)
+        public void CreateMainReport(string path, MetaData metaData)
         {
             var excelFiles = GetExcelFiles(path);
 

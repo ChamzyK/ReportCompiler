@@ -27,7 +27,6 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         }
 
         private DirectoryItem? selectedItem;
-
         public DirectoryItem? SelectedItem
         {
             get => selectedItem; set
@@ -65,6 +64,9 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
                 DirectoryService.SelectDirectory(SelectedItem);
             }
         }
+
+        public bool IsDirectorySelected => SelectedItem != null &&
+                (SelectedItem.Type == DirectoryItemType.Directory || SelectedItem.Type == DirectoryItemType.ParentDirectory);
 
         public DirectoriesViewModel(IDirectory directoryService, IFile? fileService)
         {
