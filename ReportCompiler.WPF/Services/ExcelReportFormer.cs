@@ -24,11 +24,11 @@ namespace ReportCompiler.WPF.Services
 
         public void CreateMainReport(string path, MetaData metaData)
         {
-            var excelFiles = GetExcelFiles(path);
+            //var excelFiles = GetExcelFiles(path);
 
-            var reports = GetReports(excelFiles);
+            //var reports = GetReports(excelFiles);
 
-            CreateMainReport(reports, path);
+            //CreateMainReport(reports, path);
         }
 
         private static List<FileInfo> GetExcelFiles(string path) => Directory.EnumerateFiles(Path

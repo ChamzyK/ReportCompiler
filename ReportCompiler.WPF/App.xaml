@@ -10,6 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Infrastructure/Commands/Commands.xaml"/>
                 <ResourceDictionary Source="Infrastructure/Converters/Converters.xaml"/>
+                <ResourceDictionary Source="Views/DataTemplates.xaml"/>
 
                 <md:BundledTheme BaseTheme="Light" PrimaryColor="Green" SecondaryColor="LightGreen" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />

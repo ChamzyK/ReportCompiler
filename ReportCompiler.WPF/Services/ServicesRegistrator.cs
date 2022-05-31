@@ -11,7 +11,7 @@ namespace ReportCompiler.WPF.Services
     internal static class ServicesRegistrator
     {
         public static IServiceCollection AddServices(this IServiceCollection services) => services
-            .AddTransient<IUserDialog, UserDialogService>()
+            .AddSingleton<IUserDialog, UserDialogService>()
             .AddTransient<IDirectory, DirectoryService>()
             .AddTransient<IFile, FileService>()
             .AddSingleton<IReportFormer, ExcelReportFormer>()

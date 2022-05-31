@@ -1,6 +1,6 @@
 ﻿using ReportCompiler.WPF.ViewModels.Base;
 
-namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
+namespace ReportCompiler.WPF.ViewModels.Dialogues
 {
     internal class InfoViewModel : ViewModelBase
     {

@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-
-namespace ReportCompiler.WPF.Views.UserControls
+﻿namespace ReportCompiler.WPF.Views.Dialogues
 {
     public partial class InfoView
     {

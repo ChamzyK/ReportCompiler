@@ -4,8 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:ucvm="clr-namespace:ReportCompiler.WPF.ViewModels.UserControlViewModels"
-        xmlns:ucv="clr-namespace:ReportCompiler.WPF.Views.UserControls"
+        
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
         Title="{Binding Title}"
         Height="575" Width="725"
@@ -23,28 +22,26 @@
     </Window.Resources>
 
     <md:DialogHost>
-        <md:DialogHost.DialogContentTemplate>
-            <DataTemplate DataType="{x:Type ucvm:InfoViewModel}">
-                <ucv:InfoView/>
-            </DataTemplate>
-        </md:DialogHost.DialogContentTemplate>
+        
         <md:DialogHost.DialogContent>
             <ContentControl Content="{Binding}"/>
         </md:DialogHost.DialogContent>
 
         <md:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+            
             <md:DrawerHost.LeftDrawerContent>
-                <DockPanel>
+                <DockPanel DataContext="{Binding Source={StaticResource Locator}, Path=MenuViewModel}">
                     <ToggleButton
                         Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                         HorizontalAlignment="Right"
                         IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"
                         DockPanel.Dock="Top"/>
-                    <ucv:MenuView DataContext="{Binding Source={StaticResource Locator}, Path=MenuViewModel}"/>
+                    <ContentPresenter Content="{Binding}"/>
                 </DockPanel>
             </md:DrawerHost.LeftDrawerContent>
 
             <DockPanel>
+                
                 <DockPanel DockPanel.Dock="Top">
                     <ToggleButton 
                         Name="MenuToggleButton"
@@ -58,38 +55,35 @@
                         VerticalAlignment="Center"
                         Style="{StaticResource MaterialDesignHeadline5TextBlock}"/>
                 </DockPanel>
-                <DockPanel DockPanel.Dock="Right">
 
+                <DockPanel DockPanel.Dock="Right">
                     <Button 
                         DockPanel.Dock="Bottom"
                         Content="Составить сводный отчет" 
                         Command="{Binding CreateReportCommand}"/>
-
-                    <GroupBox>
+                    <GroupBox DataContext="{Binding MetaDataViewModel}">
                         <GroupBox.Header>
                             <TextBlock
                                 Style="{DynamicResource MaterialDesignSubtitle2TextBlock}"
                                 Text="Заполнение данных"/>
                         </GroupBox.Header>
-
-                        <ucv:MetaDataView DataContext="{Binding MetaDataViewModel}"/>
-
+                        <ContentPresenter Content="{Binding}"/>
                     </GroupBox>
-
                 </DockPanel>
-                <GroupBox>
+                
+                <GroupBox DataContext="{Binding DirectoriesViewModel}">
                     <GroupBox.Header>
                         <TextBlock 
                             Style="{DynamicResource MaterialDesignSubtitle2TextBlock}"
                             Text="Выбор папки с отчетами"/>
                     </GroupBox.Header>
-
-                    <ucv:DirectoriesView DataContext="{Binding DirectoriesViewModel}"/>
-
+                    <ContentPresenter Content="{Binding}"/>
                 </GroupBox>
+                
             </DockPanel>
-
+            
         </md:DrawerHost>
+        
     </md:DialogHost>
-
+    
 </Window>
