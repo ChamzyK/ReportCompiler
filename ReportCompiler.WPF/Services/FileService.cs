@@ -1,18 +1,14 @@
-﻿using OfficeOpenXml;
-using ReportCompiler.WPF.Models.Reports;
-using ReportCompiler.WPF.Services.Interfaces;
+﻿using ReportCompiler.WPF.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 
 namespace ReportCompiler.WPF.Services
 {
     internal class FileService : IFile
     {
-        public IUserDialog UserDialog { get; init; }
+        public IUserDialog UserDialog { get; }
         public FileService(IUserDialog userDialog)
         {
             UserDialog = userDialog;

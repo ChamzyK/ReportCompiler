@@ -18,10 +18,12 @@
         <Separator/>
         <Button 
             Content="Шаблон отчета" 
-            Command="{Binding OpenReportTemplateCommand}"/>
+            Command="{Binding OpenFileCommand}"
+            CommandParameter="report_template.xlsx"/>
         <Button 
             Content="Руководство пользователя"
-            Command="{Binding OpenManualCommand}"/>
+            Command="{Binding OpenFileCommand}"
+            CommandParameter="manual.txt"/>
 
         <Separator/>
         <Button 
