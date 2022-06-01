@@ -79,5 +79,16 @@ namespace ReportCompiler.WPF.Services
                 DirectoryContent.Add(item);
             }
         }
+
+        public void OpenFileDirectory(string filePath)
+        {
+            var dirPath = new FileInfo(filePath).DirectoryName;
+            var psInfo = new ProcessStartInfo
+            {
+                FileName = dirPath,
+                UseShellExecute = true
+            };
+            Process.Start(psInfo);
+        }
     }
 }

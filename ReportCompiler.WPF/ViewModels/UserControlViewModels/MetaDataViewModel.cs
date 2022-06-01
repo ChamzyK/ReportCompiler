@@ -29,7 +29,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
                 Set(ref isAnotherMonth, value);
             }
         }
-        public string? MainReportName
+        public string? Name
         {
             get => mainReportName; set
             {
@@ -55,7 +55,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(MainReportName) &&
+                return !string.IsNullOrWhiteSpace(Name) &&
                     (!IsAnotherDate || CompileDate != null) &&
                     (!IsAnotherMonth || SelectedMonth != null);
             }
@@ -64,12 +64,10 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         {
             get
             {
-                return new MetaData
-                {
-                    CompileDate = IsAnotherDate && CompileDate != null ? (DateTime)CompileDate : DateTime.Now,
-                    Month = IsAnotherMonth && SelectedMonth != null ? SelectedMonth : DateTime.Now.ToString("MMMM"),
-                    MainReportName = MainReportName ?? $"Сводный отчет за {DateTime.Now:MMMM}"
-                };
+                var month = IsAnotherMonth && SelectedMonth != null ? SelectedMonth : DateTime.Now.ToString("MMMM");
+                var name = Name ?? $"Сводный отчет за {DateTime.Now:MMMM}";
+                var date = IsAnotherDate && CompileDate != null ? (DateTime)CompileDate : DateTime.Now;
+                return new MetaData(month, name, date);
             }
         }
 

@@ -24,13 +24,24 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         public ICommand AboutProgramCommand { get; init; }
         private void AboutProgram(object? obj)
         {
-            UserDialog.ShowMessage("О программе", "<Информация о программе>");
+            UserDialog.ShowMessage("О программе", "ReportCompiler\n\n" +
+                "Автоматизированное формирование сводных отчетов в отделе трудоустройства управления занятости населения НСО\n\n" +
+                "Технологии:\n" +
+                "WPF (Windows Presentation Foundation)\n" +
+                "Material Design in XAML\n" +
+                "EPPlus 4.5.3.3\n\n" +
+                "Год разработки: 2022");
         }
 
         public ICommand AboutDevCommand { get; init; }
         private void AboutDev(object? obj)
         {
-            UserDialog.ShowMessage("О разработчике", "<Информация о разработчике>");
+            UserDialog.ShowMessage("О разработчике",
+                "Город: Новосибирск\n" +
+                "Организация: СГУПС\n" +
+                "Кафедра: ИТТ\n\n" +
+                "Разработчик: Чамзы К. Э.\n" +
+                "Руководитель: Сарычев С. П.");
         }
 
         public MenuViewModel(IUserDialog userDialog)

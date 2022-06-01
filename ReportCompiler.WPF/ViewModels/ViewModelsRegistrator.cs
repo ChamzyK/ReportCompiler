@@ -8,12 +8,16 @@ namespace ReportCompiler.WPF.ViewModels
     {
         public static IServiceCollection AddViewModels(this IServiceCollection services) => services
             .AddSingleton<MainViewModel>()
+
             .AddTransient<InfoViewModel>()
             .AddTransient<IncorrectReportsViewModel>()
             .AddTransient<SuccessResultViewModel>()
+
             .AddSingleton<DirectoriesViewModel>()
             .AddSingleton<MetaDataViewModel>()
             .AddSingleton<MenuViewModel>()
+
+            .AddSingleton<ReportFormerViewModel>()
         ;
     }
 }

@@ -1,7 +1,10 @@
 ﻿using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.DependencyInjection;
+using ReportCompiler.WPF.Models.Reports;
 using ReportCompiler.WPF.Services.Interfaces;
 using ReportCompiler.WPF.ViewModels.Dialogues;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ReportCompiler.WPF.Services
 {
@@ -15,15 +18,17 @@ namespace ReportCompiler.WPF.Services
             DialogHost.Show(infoViewModel);
         }
 
-        public void ShowSuccessResult()
+        public void ShowSuccessResult(string filePath)
         {
             var successResultViewModel = App.Services.GetRequiredService<SuccessResultViewModel>();
+            successResultViewModel.SummaryPath = filePath;
             DialogHost.Show(successResultViewModel);
         }
 
-        public void ShowIncorrectReports()
+        public void ShowIncorrectReports(List<ReportInfo> reportInfos)
         {
             var incorrectReportsViewModel = App.Services.GetRequiredService<IncorrectReportsViewModel>();
+            incorrectReportsViewModel.IncorrectReports = new ObservableCollection<ReportInfo>(reportInfos);
             DialogHost.Show(incorrectReportsViewModel);
         }
     }

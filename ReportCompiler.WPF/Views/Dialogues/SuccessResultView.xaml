@@ -11,7 +11,7 @@
         <UniformGrid Columns="1">
             <Button
                 Content="Открыть файл"
-                Command="{Binding OpenMainReportCommand}"/>
+                Command="{Binding OpenSummaryCommand}"/>
             <Button
                 Content="Открыть папку"
                 Command="{Binding OpenDirectoryCommand}"/>

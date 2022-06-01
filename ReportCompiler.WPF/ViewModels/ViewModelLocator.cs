@@ -7,5 +7,6 @@ namespace ReportCompiler.WPF.ViewModels
     {
         public static MainViewModel MainViewModel => App.Services.GetRequiredService<MainViewModel>();
         public static MenuViewModel MenuViewModel => App.Services.GetRequiredService<MenuViewModel>();
+        public static ReportFormerViewModel ReportFormerViewModel => App.Services.GetRequiredService<ReportFormerViewModel>();
     }
 }

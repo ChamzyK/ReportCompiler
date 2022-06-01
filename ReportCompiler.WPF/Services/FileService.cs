@@ -1,9 +1,12 @@
-﻿using ReportCompiler.WPF.Models;
+﻿using OfficeOpenXml;
+using ReportCompiler.WPF.Models.Reports;
 using ReportCompiler.WPF.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace ReportCompiler.WPF.Services
 {
@@ -15,14 +18,14 @@ namespace ReportCompiler.WPF.Services
             UserDialog = userDialog;
         }
 
-        public bool CanOpen(DirectoryItem directoryItem) => File.Exists(directoryItem.Path);
-        public bool Open(DirectoryItem directoryItem)
+        public bool CanOpen(string path) => File.Exists(path);
+        public bool Open(string path)
         {
             try
             {
                 var psInfo = new ProcessStartInfo
                 {
-                    FileName = directoryItem.Path,
+                    FileName = path,
                     UseShellExecute = true
                 };
                 Process.Start(psInfo);

@@ -1,10 +1,10 @@
-﻿using ReportCompiler.WPF.Models;
+﻿using ReportCompiler.WPF.Models.Reports;
 
 namespace ReportCompiler.WPF.Services.Interfaces
 {
     internal interface IFile
     {
-        bool Open(DirectoryItem directoryItem);
-        bool CanOpen(DirectoryItem directoryItem);
+        bool Open(string path);
+        bool CanOpen(string path);
     }
 }

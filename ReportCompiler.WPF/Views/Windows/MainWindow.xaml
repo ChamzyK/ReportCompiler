@@ -60,7 +60,8 @@
                     <Button 
                         DockPanel.Dock="Bottom"
                         Content="Составить сводный отчет" 
-                        Command="{Binding CreateReportCommand}"/>
+                        Command="{Binding CreateReportCommand}"
+                        DataContext="{Binding Source={StaticResource Locator}, Path=ReportFormerViewModel}"/>
                     <GroupBox DataContext="{Binding MetaDataViewModel}">
                         <GroupBox.Header>
                             <TextBlock

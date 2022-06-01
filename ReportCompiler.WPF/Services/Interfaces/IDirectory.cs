@@ -9,5 +9,7 @@ namespace ReportCompiler.WPF.Services.Interfaces
 
         public bool SelectDirectory(DirectoryItem browserItem);
         public bool CanSelectDirectory(DirectoryItem browserItem);
+
+        public void OpenFileDirectory(string filePath);
     }
 }

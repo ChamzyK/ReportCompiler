@@ -17,14 +17,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
             }
         }
 
-        private IFile? fileService;
-        public IFile? FileService
-        {
-            get => fileService; set
-            {
-                Set(ref fileService, value);
-            }
-        }
+        public IFile FileService { get; init; }
 
         private DirectoryItem? selectedItem;
         public DirectoryItem? SelectedItem
@@ -35,16 +28,16 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
             }
         }
 
-        public ICommand OpenCommand => new RelayCommand(Open, CanOpen);
+        public ICommand OpenCommand { get; init; }
         private bool CanOpen(object? arg)
         {
             if (SelectedItem == null) return false;
 
             if (SelectedItem.Type == DirectoryItemType.ExcelFile && FileService != null)
             {
-                return FileService.CanOpen(SelectedItem);
+                return FileService.CanOpen(SelectedItem.Path);
             }
-            else if(DirectoryService != null)
+            else if (DirectoryService != null)
             {
                 return DirectoryService.CanSelectDirectory(SelectedItem);
             }
@@ -57,7 +50,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
 
             if (SelectedItem.Type == DirectoryItemType.ExcelFile)
             {
-                FileService.Open(SelectedItem);
+                FileService.Open(SelectedItem.Path);
             }
             else
             {
@@ -68,10 +61,12 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         public bool IsDirectorySelected => SelectedItem != null &&
                 (SelectedItem.Type == DirectoryItemType.Directory || SelectedItem.Type == DirectoryItemType.ParentDirectory);
 
-        public DirectoriesViewModel(IDirectory directoryService, IFile? fileService)
+        public DirectoriesViewModel(IDirectory directoryService, IFile fileService)
         {
             DirectoryService = directoryService;
             FileService = fileService;
+
+            OpenCommand = new RelayCommand(Open, CanOpen);
         }
     }
 }

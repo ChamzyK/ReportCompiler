@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ReportCompiler.WPF.Models;
 using ReportCompiler.WPF.Services.Interfaces;
+using ReportCompiler.WPF.Services.SummaryServices;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +15,7 @@ namespace ReportCompiler.WPF.Services
             .AddSingleton<IUserDialog, UserDialogService>()
             .AddTransient<IDirectory, DirectoryService>()
             .AddTransient<IFile, FileService>()
-            .AddSingleton<IReportFormer, ExcelReportFormer>()
+            .AddSingleton<ISummaryCompiler, SummaryCompiler>()
             .AddTransient<ICollection<DirectoryItem>, ObservableCollection<DirectoryItem>>()
             .AddTransient(services =>
             {

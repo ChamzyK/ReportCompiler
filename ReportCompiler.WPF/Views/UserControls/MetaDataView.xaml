@@ -11,7 +11,7 @@
             TextWrapping="Wrap"
             MaxLength="100"
             Margin="0,0,0,10"
-            Text="{Binding MainReportName, UpdateSourceTrigger=PropertyChanged}"/>
+            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
 
         <CheckBox 
             Content="Другая дата составления"
