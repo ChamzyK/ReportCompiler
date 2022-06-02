@@ -12,7 +12,9 @@
                 Content="Закрыть"
                 Command="{x:Static md:DialogHost.CloseDialogCommand}"/>
             <Button
-                Content="Составить"/>
+                Content="Открыть папку"
+                Command="{StaticResource OpenDirectoryCommand}"
+                CommandParameter="{Binding DirectoryPath}"/>
         </UniformGrid>
 
         <GroupBox>
@@ -31,32 +33,36 @@
                 CanUserSortColumns="False"
                 CanUserDeleteRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Path}" Header="Файл">
+                    <DataGridTextColumn Binding="{Binding Name}" Header="Файл">
                         <DataGridTextColumn.ElementStyle>
                             <Style>
                                 <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding Comment}" Header="Ошибка">
+                    <DataGridTextColumn Binding="{Binding Comment}" Header="Адрес ошибки">
                         <DataGridTextColumn.ElementStyle>
                             <Style>
                                 <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Открыть"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Действия">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Проверить"/>
+                                <StackPanel>
+                                    <Button 
+                                        Content="Открыть" 
+                                        Command="{StaticResource OpenFileCommand}" 
+                                        CommandParameter="{Binding Path}"/>
+                                    <Button 
+                                        Content="Проверить"
+                                        Command="{Binding DataContext.CheckReportCommand,
+                                        RelativeSource={RelativeSource FindAncestor,
+                                        AncestorType=UserControl}}"
+                                        CommandParameter="{Binding Path}"/>
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

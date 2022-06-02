@@ -8,11 +8,12 @@ namespace ReportCompiler.WPF.ViewModels
 {
     internal class ReportFormerViewModel : ViewModelBase
     {
-        public MainViewModel MainViewModel { get; init; }
-        public IUserDialog UserDialog { get; init; }
-        public ISummaryCompiler SummaryCompiler { get; init; }
 
-        public ICommand CreateReportCommand { get; init; }
+        public MainViewModel MainViewModel { get; }
+        public IUserDialog UserDialog { get; }
+        public ISummaryCompiler SummaryCompiler { get; }
+
+        public ICommand CreateReportCommand { get; }
         private bool CanCreateReport(object? arg)
         {
             var isDirSelected = MainViewModel.DirectoriesViewModel.IsDirectorySelected;

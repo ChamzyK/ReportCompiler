@@ -11,10 +11,12 @@
         <UniformGrid Columns="1">
             <Button
                 Content="Открыть файл"
-                Command="{Binding OpenSummaryCommand}"/>
+                Command="{StaticResource OpenFileCommand}"
+                CommandParameter="{Binding SummaryPath}"/>
             <Button
                 Content="Открыть папку"
-                Command="{Binding OpenDirectoryCommand}"/>
+                Command="{StaticResource OpenDirectoryCommand}"
+                CommandParameter="{Binding SummaryPath}"/>
             <Button
                 Content="Закрыть"
                 Command="{x:Static md:DialogHost.CloseDialogCommand}"/>

@@ -18,11 +18,11 @@
         <Separator/>
         <Button 
             Content="Шаблон отчета" 
-            Command="{Binding OpenFileCommand}"
+            Command="{StaticResource OpenFileCommand}"
             CommandParameter="report_template.xlsx"/>
         <Button 
             Content="Руководство пользователя"
-            Command="{Binding OpenFileCommand}"
+            Command="{StaticResource OpenFileCommand}"
             CommandParameter="manual.txt"/>
 
         <Separator/>

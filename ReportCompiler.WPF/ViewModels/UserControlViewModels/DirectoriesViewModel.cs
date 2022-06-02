@@ -58,8 +58,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
             }
         }
 
-        public bool IsDirectorySelected => SelectedItem != null &&
-                (SelectedItem.Type == DirectoryItemType.Directory || SelectedItem.Type == DirectoryItemType.ParentDirectory);
+        public bool IsDirectorySelected => SelectedItem != null && (SelectedItem.Type == DirectoryItemType.Directory);
 
         public DirectoriesViewModel(IDirectory directoryService, IFile fileService)
         {

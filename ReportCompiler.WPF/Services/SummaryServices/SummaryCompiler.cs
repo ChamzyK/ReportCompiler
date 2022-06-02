@@ -17,7 +17,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             var data = ReportReader.ReadNotEmptyCells(sheet);
 
             var isCorrect = true;
-            var comment = string.Empty;
+            var comment = string.Empty; 
 
             if (string.IsNullOrWhiteSpace(ReportReader.GetDistrict(excelPackage)))
             {
@@ -30,19 +30,19 @@ namespace ReportCompiler.WPF.Services.SummaryServices
                 if (sheet.Cells[10, 2 + i].Value == null)
                 {
                     isCorrect = false;
-                    comment += $"Ячейка: {(char)('B' + i)}9.\n";
+                    comment += $"Ячейка: {(char)('B' + i)}10.\n";
                     continue;
                 }
-                var ab = sheet.Cells[10, 2 + i].Value.ToString();
+
                 var a = !sheet.Cells[10, 2 + i].Value.ToString().Any(symbol => char.IsDigit(symbol));
                 if (a)
                 {
                     isCorrect = false;
-                    comment += $"Ячейка: {(char)('B' + i)}9.\n";
+                    comment += $"Ячейка: {(char)('B' + i)}10.\n";
                 }
             }
 
-            return new ReportInfo(fileInfo.Name, isCorrect, comment);
+            return new ReportInfo(fileInfo.Name, fileInfo.FullName, isCorrect, comment);
         }
 
         public List<ReportInfo> GetReportInfos(string dirPath)

@@ -51,31 +51,31 @@ namespace ReportCompiler.WPF.Services.SummaryServices
 
         public static string ReadInspections(ExcelWorksheet sheet)
         {
-            return sheet.Cells[2, 12] != null ? sheet.Cells[2, 12].Value.ToString() : "";
+            return sheet.Cells[13, 2] != null ? sheet.Cells[13, 2].Value.ToString() : "";
         }
         public static string ReadRepliesReceviedYes(ExcelWorksheet sheet)
         {
-            return sheet.Cells[7, 9] != null ? sheet.Cells[7, 9].Value.ToString() : "";
+            return sheet.Cells[10, 7] != null ? sheet.Cells[10, 7].Value.ToString() : "";
         }
         public static string ReadRepliesReceviedNo(ExcelWorksheet sheet)
         {
-            return sheet.Cells[6, 9] != null ? sheet.Cells[6, 9].Value.ToString() : "";
+            return sheet.Cells[10, 6] != null ? sheet.Cells[10, 6].Value.ToString() : "";
         }
         public static string ReadRequestsSent(ExcelWorksheet sheet)
         {
-            return sheet.Cells[5, 9] != null ? sheet.Cells[5, 9].Value.ToString() : "";
+            return sheet.Cells[10, 5] != null ? sheet.Cells[10, 5].Value.ToString() : "";
         }
         public static string ReadAgreements(ExcelWorksheet sheet)
         {
-            return sheet.Cells[4, 9] != null ? sheet.Cells[4, 9].Value.ToString() : "";
+            return sheet.Cells[10, 4] != null ? sheet.Cells[10, 4].Value.ToString() : "";
         }
         public static string ReadIssuedOrders(ExcelWorksheet sheet)
         {
-            return sheet.Cells[3, 9] != null ? sheet.Cells[3, 9].Value.ToString() : "";
+            return sheet.Cells[10, 3] != null ? sheet.Cells[10, 3].Value.ToString() : "";
         }
         public static string ReadDeclaration(ExcelWorksheet sheet)
         {
-            return sheet.Cells[2, 9] != null ? sheet.Cells[2, 9].Value.ToString() : "";
+            return sheet.Cells[10, 2] != null ? sheet.Cells[10, 2].Value.ToString() : "";
         }
 
         public static List<ExcelRangeBase> ReadNotEmptyCells(ExcelWorksheet sheet) => sheet.Cells

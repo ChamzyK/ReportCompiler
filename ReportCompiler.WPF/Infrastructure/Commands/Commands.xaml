@@ -3,4 +3,6 @@
                     xmlns:local="clr-namespace:ReportCompiler.WPF.Infrastructure.Commands">
     <local:CloseWindowCommand x:Key="CloseWindowCommand"/>
     <local:AppDirectoryCommand x:Key="AppDirectoryCommand"/>
+    <local:OpenFileCommand x:Key="OpenFileCommand"/>
+    <local:OpenDirectoryCommand x:Key="OpenDirectoryCommand"/>
 </ResourceDictionary>

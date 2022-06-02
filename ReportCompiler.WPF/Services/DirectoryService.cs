@@ -32,7 +32,7 @@ namespace ReportCompiler.WPF.Services
 
                 DirectoryContent.Clear();
 
-                AddParent();
+                AddCurrent();
                 AddItems(DirectoryNames, DirectoryItemType.Directory);
                 AddItems(ExcelFileNames, DirectoryItemType.ExcelFile);
 
@@ -58,11 +58,11 @@ namespace ReportCompiler.WPF.Services
             ? Array.Empty<string>() 
             : Directory.GetFiles(DirectoryInfo.FullName, "*.xls?");
 
-        private void AddParent()
+        private void AddCurrent()
         {
             if (DirectoryInfo == null || DirectoryInfo.Parent == null) return;
 
-            var name = DirectoryInfo.Parent.Name;
+            var name = DirectoryInfo.Name;
             var path = DirectoryInfo.Parent.FullName;
             var type = DirectoryItemType.ParentDirectory;
 
@@ -80,9 +80,9 @@ namespace ReportCompiler.WPF.Services
             }
         }
 
-        public void OpenFileDirectory(string filePath)
+        public void OpenDirectory(string path)
         {
-            var dirPath = new FileInfo(filePath).DirectoryName;
+            var dirPath = Path.GetDirectoryName(path);
             var psInfo = new ProcessStartInfo
             {
                 FileName = dirPath,

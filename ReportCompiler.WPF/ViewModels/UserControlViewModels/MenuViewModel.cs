@@ -1,7 +1,6 @@
 ﻿using ReportCompiler.WPF.Infrastructure.Commands;
 using ReportCompiler.WPF.Services.Interfaces;
 using ReportCompiler.WPF.ViewModels.Base;
-using System;
 using System.Windows.Input;
 
 namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
@@ -9,18 +8,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
     internal class MenuViewModel : ViewModelBase
     {
         public IUserDialog UserDialog { get; }
-        public IFile File { get; }
-
-        public ICommand OpenFileCommand { get; }
-        private bool CanOpeFile(object? arg)
-        {
-            if (arg == null || arg is not string path) return false;
-            return File.CanOpen(path);
-        }
-        private void OpenFile(object? obj)
-        {
-            File.Open((string)obj);
-        }
+        public IFile FileService { get; }
 
         public ICommand AboutProgramCommand { get; }
         private void AboutProgram(object? obj)
@@ -48,9 +36,8 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         public MenuViewModel(IUserDialog userDialog, IFile file)
         {
             UserDialog = userDialog;
-            File = file;
+            FileService = file;
 
-            OpenFileCommand = new RelayCommand(OpenFile, CanOpeFile);
             AboutProgramCommand = new RelayCommand(AboutProgram);
             AboutDevCommand = new RelayCommand(AboutDev);
         }
