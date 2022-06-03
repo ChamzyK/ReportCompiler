@@ -1,8 +1,6 @@
-﻿using System.Windows.Controls;
-
-namespace ReportCompiler.WPF.Views.UserControls
+﻿namespace ReportCompiler.WPF.Views.UserControls
 {
-    public partial class MetaDataView : UserControl
+    public partial class MetaDataView
     {
         public MetaDataView() => InitializeComponent();
     }

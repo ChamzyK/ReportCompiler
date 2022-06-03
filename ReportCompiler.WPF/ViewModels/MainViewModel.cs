@@ -5,7 +5,7 @@ namespace ReportCompiler.WPF.ViewModels
 {
     internal class MainViewModel : ViewModelBase
     {
-        private string title = "Summary report compiler";
+        private string title = "ReportCompiler";
         public string Title
         {
             get => title; set
@@ -14,8 +14,8 @@ namespace ReportCompiler.WPF.ViewModels
             }
         }
 
-        public MetaDataViewModel MetaDataViewModel { get; init; }
-        public DirectoriesViewModel DirectoriesViewModel { get; init; }
+        public MetaDataViewModel MetaDataViewModel { get; }
+        public DirectoriesViewModel DirectoriesViewModel { get; }
 
         public MainViewModel(MetaDataViewModel metaDataViewModel, DirectoriesViewModel directoriesViewModel)
         {

@@ -12,7 +12,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         private bool isAnotherMonth;
         private bool isAnotherDate;
 
-        public string[] Months { get; init; }
+        public string[] Months { get; }
 
         public bool IsAnotherDate
         {

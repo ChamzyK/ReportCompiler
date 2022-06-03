@@ -9,11 +9,12 @@
             </Style>
         </StackPanel.Resources>
 
-        <TextBlock Text="Меню"
-                   Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Margin="5"/>
+        <TextBlock 
+            Text="Меню"
+            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Margin="5"/>
 
         <Separator/>
         <Button 

@@ -2,9 +2,9 @@
 {
     internal class DirectoryItem
     {
-        public string Name { get; init; }
-        public string Path { get; init; }
-        public DirectoryItemType Type { get; init; }
+        public string Name { get; }
+        public string Path { get; }
+        public DirectoryItemType Type { get; }
 
         public DirectoryItem(string name, string path, DirectoryItemType type)
         {

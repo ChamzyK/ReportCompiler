@@ -17,7 +17,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
             }
         }
 
-        public IFile FileService { get; init; }
+        public IFile FileService { get; }
 
         private DirectoryItem? selectedItem;
         public DirectoryItem? SelectedItem
@@ -28,7 +28,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
             }
         }
 
-        public ICommand OpenCommand { get; init; }
+        public ICommand OpenCommand { get; }
         private bool CanOpen(object? arg)
         {
             if (SelectedItem == null) return false;

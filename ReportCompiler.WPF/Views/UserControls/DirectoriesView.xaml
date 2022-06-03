@@ -42,8 +42,10 @@
                             CommandParameter="{Binding}"/>
                         </DockPanel.InputBindings>
 
-                        <ContentControl Content="{Binding Type, Converter={StaticResource PackIconConverter}}"
-                                    DockPanel.Dock="Left"/>
+                        <ContentControl 
+                            Content="{Binding Type, Converter={StaticResource PackIconConverter}}"
+                            DockPanel.Dock="Left"/>
+                        
                         <TextBlock Text="{Binding Name}"/>
 
                     </DockPanel>

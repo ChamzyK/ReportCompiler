@@ -34,12 +34,17 @@ namespace ReportCompiler.WPF.Services.SummaryServices
                     continue;
                 }
 
-                var a = !sheet.Cells[10, 2 + i].Value.ToString().Any(symbol => char.IsDigit(symbol));
-                if (a)
+                if (!sheet.Cells[10, 2 + i].Value.ToString().Any(symbol => char.IsDigit(symbol)))
                 {
                     isCorrect = false;
                     comment += $"Ячейка: {(char)('B' + i)}10.\n";
                 }
+            }
+
+            if(sheet.Cells[13,2].Value == null)
+            {
+                isCorrect = false;
+                comment += $"Ячейка: B13.\n";
             }
 
             return new ReportInfo(fileInfo.Name, fileInfo.FullName, isCorrect, comment);

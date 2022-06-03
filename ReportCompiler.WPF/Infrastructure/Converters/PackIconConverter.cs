@@ -18,7 +18,7 @@ namespace ReportCompiler.WPF.Infrastructure.Converters
             return GetPackIconKind(type);
         }
 
-        private PackIcon GetPackIconKind(DirectoryItemType type) => type switch
+        private static PackIcon GetPackIconKind(DirectoryItemType type) => type switch
         {
             DirectoryItemType.Directory => new PackIcon { Kind = PackIconKind.Folder, Margin = new Thickness(10, 0, 5, 0) },
             DirectoryItemType.ExcelFile => new PackIcon { Kind = PackIconKind.MicrosoftExcel, Margin = new Thickness(10, 0, 5, 0) },

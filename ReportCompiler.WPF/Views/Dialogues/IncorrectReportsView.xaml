@@ -33,10 +33,13 @@
                 CanUserSortColumns="False"
                 CanUserDeleteRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Name}" Header="Файл">
+                    <DataGridTextColumn 
+                        Binding="{Binding Name}" 
+                        Header="Файл" 
+                        MaxWidth="275">
                         <DataGridTextColumn.ElementStyle>
                             <Style>
-                                <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>

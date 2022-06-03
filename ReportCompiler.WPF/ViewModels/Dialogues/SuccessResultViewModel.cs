@@ -1,7 +1,4 @@
-﻿using ReportCompiler.WPF.Infrastructure.Commands;
-using ReportCompiler.WPF.Services.Interfaces;
-using ReportCompiler.WPF.ViewModels.Base;
-using System.Windows.Input;
+﻿using ReportCompiler.WPF.ViewModels.Base;
 
 namespace ReportCompiler.WPF.ViewModels.Dialogues
 {
