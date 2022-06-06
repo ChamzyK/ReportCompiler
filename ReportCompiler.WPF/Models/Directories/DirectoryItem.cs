@@ -1,4 +1,4 @@
-﻿namespace ReportCompiler.WPF.Models
+﻿namespace ReportCompiler.WPF.Models.Directories
 {
     internal class DirectoryItem
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ReportCompiler.WPF.Models;
+using ReportCompiler.WPF.Models.Directories;
 using ReportCompiler.WPF.Services.Interfaces;
 using ReportCompiler.WPF.Services.SummaryServices;
 using System;

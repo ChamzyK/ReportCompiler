@@ -1,6 +1,6 @@
 ﻿using MaterialDesignThemes.Wpf;
 using ReportCompiler.WPF.Infrastructure.Converters.Base;
-using ReportCompiler.WPF.Models;
+using ReportCompiler.WPF.Models.Directories;
 using System;
 using System.Globalization;
 using System.Windows;

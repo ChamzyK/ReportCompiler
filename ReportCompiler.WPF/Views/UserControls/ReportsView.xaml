@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="ReportCompiler.WPF.Views.UserControls.ReportsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <DockPanel>
+
+        <UniformGrid DockPanel.Dock="Bottom">
+
+        </UniformGrid>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="65"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="65"/>
+            </Grid.ColumnDefinitions>
+
+            <Button 
+                Grid.Row="1"
+                Grid.Column="1"
+                Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                ToolTip="Обновить"
+                Panel.ZIndex="9999"
+                Command="{Binding RefreshReportsCommand}"
+                Content="{md:PackIcon Refresh, Size=20}"/>
+
+
+            <ListView
+                ItemsSource="{Binding ReportFiles}" 
+                SelectedItem="{Binding SelectedItem}"
+                Grid.RowSpan="2"
+                Grid.ColumnSpan="2">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <DockPanel.InputBindings>
+                                <MouseBinding
+                                    Gesture="LeftDoubleClick"
+                                    Command="{StaticResource OpenFileCommand}"
+                                    CommandParameter="{Binding DataContext.SelectedItem.Path,
+                                    RelativeSource={RelativeSource FindAncestor,
+                                    AncestorType=UserControl}}"/>
+                            </DockPanel.InputBindings>
+
+                            <ContentControl 
+                                Content="{Binding Type, Converter={StaticResource PackIconConverter}}"
+                                DockPanel.Dock="Left"/>
+
+                            <TextBlock Text="{Binding Name}"/>
+
+                        </DockPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+            </ListView>
+        </Grid>
+    </DockPanel>
+</UserControl>

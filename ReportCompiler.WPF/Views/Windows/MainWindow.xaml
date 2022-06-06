@@ -69,14 +69,7 @@
                                 Text="Заполнение данных"/>
                         </GroupBox.Header>
                         <StackPanel MaxWidth="225">
-                            <TextBox
-                                md:HintAssist.Hint="Название сводного отчета"
-                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                md:TextFieldAssist.HasClearButton="True"
-                                TextWrapping="Wrap"
-                                MaxLength="100"
-                                Margin="0,0,0,10"
-                                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                            <ContentPresenter Content="{Binding}"/>
                         </StackPanel>
                     </GroupBox>
                 </DockPanel>
@@ -85,7 +78,7 @@
                     <GroupBox.Header>
                         <TextBlock 
                             Style="{DynamicResource MaterialDesignSubtitle2TextBlock}"
-                            Text="Выбор папки с отчетами"/>
+                            Text="Папка с отчетами"/>
                     </GroupBox.Header>
                     <ContentPresenter Content="{Binding}"/>
                 </GroupBox>

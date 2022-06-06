@@ -1,4 +1,4 @@
-﻿using ReportCompiler.WPF.Models;
+﻿using ReportCompiler.WPF.Models.Directories;
 using ReportCompiler.WPF.Services.Interfaces;
 using System;
 using System.Collections.Generic;

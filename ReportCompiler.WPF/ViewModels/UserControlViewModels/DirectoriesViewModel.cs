@@ -1,5 +1,5 @@
 ﻿using ReportCompiler.WPF.Infrastructure.Commands;
-using ReportCompiler.WPF.Models;
+using ReportCompiler.WPF.Models.Directories;
 using ReportCompiler.WPF.Services.Interfaces;
 using ReportCompiler.WPF.ViewModels.Base;
 using System.Windows.Input;
