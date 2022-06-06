@@ -49,11 +49,12 @@ namespace ReportCompiler.WPF.Services
                 return false;
             }
         }
-        public bool CanSelectDirectory(DirectoryItem browserItem) => Directory.Exists(browserItem.Path);
+        public bool Exists(string path) => Directory.Exists(path);
 
         private string[] DirectoryNames => DirectoryInfo == null 
             ? Array.Empty<string>() 
             : Directory.GetDirectories(DirectoryInfo.FullName);
+
         private string[] ExcelFileNames => DirectoryInfo == null 
             ? Array.Empty<string>() 
             : Directory.GetFiles(DirectoryInfo.FullName, "*.xls?");

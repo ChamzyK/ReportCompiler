@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using ReportCompiler.WPF.Models.Reports;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +11,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
         {
             var fileName = readPackage.File.Name;
 
-            return ConvertToFullName(fileName.Split('_')[0]);
+            return ConvertToFullName(fileName.Replace(fileName.Contains(".xlsx") ? ".xlsx" : ".xls", "").Split('_')[0]);
         }
         public static string ConvertToFullName(string district) => district switch
         {
@@ -23,15 +24,20 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             "Новосибирск" => "г. Новосибирск",
             "Новосибирский район" => "Новосибирский",
             "Ордынск" => "Ордынский",
+            "Ордынка" => "Ордынский",
             "Северный" => "Северный",
+            "Северное" => "Северный",
             "Сузун" => "Сузунский",
             "Татарск" => "г. Татарск",
             "Тогучин" => "Тогучинский",
             "Убинка" => "Убинский",
             "Усть-Тарка" => "Усть-Таркский",
+            "Усть Тарка" => "Усть-Таркский",
             "Чаны" => "Чановский",
             "Черепаново" => "Черепановский",
             "Чистоозерный" => "Чистоозерный",
+            "Чистоозерное" => "Чистоозерный",
+            "Чистоозерка" => "Чистоозерный",
             "Чулым" => "Чулымский",
             "Болотное" => "Болотнинский",
             "Венгерово" => "Венгеровский",
@@ -49,35 +55,6 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             _ => string.Empty
         };
 
-        public static string ReadInspections(ExcelWorksheet sheet)
-        {
-            return sheet.Cells[13, 2] != null ? sheet.Cells[13, 2].Value.ToString() : "";
-        }
-        public static string ReadRepliesReceviedYes(ExcelWorksheet sheet)
-        {
-            return sheet.Cells[10, 7] != null ? sheet.Cells[10, 7].Value.ToString() : "";
-        }
-        public static string ReadRepliesReceviedNo(ExcelWorksheet sheet)
-        {
-            return sheet.Cells[10, 6] != null ? sheet.Cells[10, 6].Value.ToString() : "";
-        }
-        public static string ReadRequestsSent(ExcelWorksheet sheet)
-        {
-            return sheet.Cells[10, 5] != null ? sheet.Cells[10, 5].Value.ToString() : "";
-        }
-        public static string ReadAgreements(ExcelWorksheet sheet)
-        {
-            return sheet.Cells[10, 4] != null ? sheet.Cells[10, 4].Value.ToString() : "";
-        }
-        public static string ReadIssuedOrders(ExcelWorksheet sheet)
-        {
-            return sheet.Cells[10, 3] != null ? sheet.Cells[10, 3].Value.ToString() : "";
-        }
-        public static string ReadDeclaration(ExcelWorksheet sheet)
-        {
-            return sheet.Cells[10, 2] != null ? sheet.Cells[10, 2].Value.ToString() : "";
-        }
-
         public static List<ExcelRangeBase> ReadNotEmptyCells(ExcelWorksheet sheet) => sheet.Cells
             .Where(cell => HasContent(cell))
             .ToList()
@@ -85,6 +62,28 @@ namespace ReportCompiler.WPF.Services.SummaryServices
         private static bool HasContent(ExcelRangeBase cell)
         {
             return cell.Value != null && !string.IsNullOrWhiteSpace(cell.Value.ToString());
+        }
+
+        public static (TemplateType template, ExcelRangeBase cell) GetTemplate(List<ExcelRangeBase> data)
+        {
+            var firstTemplateCell = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Replace(" ", "").Replace("   ", "") == "кол-во(месяц)");
+
+            var secondTemplateCell = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Replace(" ", "").Replace("   ", "") == "х");
+
+            var thirdTemplateCellNo = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Contains("(нет)"));
+            var thirdTemplateCellYes = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Contains("(да)"));
+
+            var forthTemplateCell = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Contains("получено"));
+
+            var fifthTemplateCell = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Contains("поступило"));
+
+            if (firstTemplateCell != null) return (TemplateType.WithMonths, firstTemplateCell);
+            else if (secondTemplateCell != null) return (TemplateType.WithX, secondTemplateCell);
+            else if (thirdTemplateCellNo != null && thirdTemplateCellYes != null) return (TemplateType.WithNoYes, thirdTemplateCellNo);
+            else if (forthTemplateCell != null && forthTemplateCell.End.Column == 6) return (TemplateType.Empty, forthTemplateCell);
+            else if (fifthTemplateCell != null) return (TemplateType.WithoutX, fifthTemplateCell);
+
+            throw new System.Exception("Не удалось определить шаблон");
         }
     }
 }

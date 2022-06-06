@@ -14,7 +14,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         private void AboutProgram(object? obj)
         {
             UserDialog.ShowMessage("О программе", "ReportCompiler\n\n" +
-                "Автоматизированное формирование сводных отчетов в отделе трудоустройства управления занятости населения НСО\n\n" +
+                "Автоматизированное формирование сводных отчетов в отделе трудоустройства управления занятости населения\n\n" +
                 "Технологии:\n" +
                 "WPF (Windows Presentation Foundation)\n" +
                 "Material Design in XAML\n" +

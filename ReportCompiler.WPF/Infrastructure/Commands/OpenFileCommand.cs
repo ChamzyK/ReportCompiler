@@ -11,7 +11,7 @@ namespace ReportCompiler.WPF.Infrastructure.Commands
         protected override bool CanExecute(object? parameter)
         {
             if (parameter == null || parameter is not string path) return false;
-            return FileService.CanOpen(path);
+            return FileService.Exists(path);
         }
 
         protected override void Execute(object? parameter)

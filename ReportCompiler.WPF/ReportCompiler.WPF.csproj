@@ -7,11 +7,11 @@
     <UseWPF>true</UseWPF>
     <StartupObject>ReportCompiler.WPF.Program</StartupObject>
     <!--<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>-->
-    <ApplicationIcon>ProjectIcon.ico</ApplicationIcon>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="ProjectIcon.ico" />
+    <Content Include="AppIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>

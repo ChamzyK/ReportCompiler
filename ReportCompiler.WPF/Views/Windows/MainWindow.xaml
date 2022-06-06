@@ -22,13 +22,13 @@
     </Window.Resources>
 
     <md:DialogHost>
-        
+
         <md:DialogHost.DialogContent>
             <ContentControl Content="{Binding}"/>
         </md:DialogHost.DialogContent>
 
         <md:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
-            
+
             <md:DrawerHost.LeftDrawerContent>
                 <DockPanel DataContext="{Binding Source={StaticResource Locator}, Path=MenuViewModel}">
                     <ToggleButton
@@ -41,7 +41,7 @@
             </md:DrawerHost.LeftDrawerContent>
 
             <DockPanel>
-                
+
                 <DockPanel DockPanel.Dock="Top">
                     <ToggleButton 
                         Name="MenuToggleButton"
@@ -68,10 +68,19 @@
                                 Style="{DynamicResource MaterialDesignSubtitle2TextBlock}"
                                 Text="Заполнение данных"/>
                         </GroupBox.Header>
-                        <ContentPresenter Content="{Binding}"/>
+                        <StackPanel MaxWidth="225">
+                            <TextBox
+                                md:HintAssist.Hint="Название сводного отчета"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                md:TextFieldAssist.HasClearButton="True"
+                                TextWrapping="Wrap"
+                                MaxLength="100"
+                                Margin="0,0,0,10"
+                                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
                     </GroupBox>
                 </DockPanel>
-                
+
                 <GroupBox DataContext="{Binding DirectoriesViewModel}">
                     <GroupBox.Header>
                         <TextBlock 
@@ -80,11 +89,11 @@
                     </GroupBox.Header>
                     <ContentPresenter Content="{Binding}"/>
                 </GroupBox>
-                
+
             </DockPanel>
-            
+
         </md:DrawerHost>
-        
+
     </md:DialogHost>
-    
+
 </Window>

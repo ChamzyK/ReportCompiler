@@ -20,8 +20,23 @@ namespace ReportCompiler.WPF.Services
             .AddTransient(services =>
             {
                 var currDir = Environment.CurrentDirectory;
-                var currDirInfo = new DirectoryInfo(currDir);
-                return new DirectoryItem(currDirInfo.Name, currDirInfo.FullName, DirectoryItemType.Directory);
+
+                var reportsDir = Directory.CreateDirectory(Path.Combine(currDir, "Отчеты"));
+
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Январь"));
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Февраль"));
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Март"));
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Апрель"));
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Май"));
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Июнь"));
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Июль"));
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Август"));
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Сентябрь"));
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Октябрь"));
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Ноябрь"));
+                Directory.CreateDirectory(Path.Combine(reportsDir.FullName, "Декабрь"));
+
+                return new DirectoryItem(reportsDir.Name, reportsDir.FullName, DirectoryItemType.Directory);
             })
         ;
     }

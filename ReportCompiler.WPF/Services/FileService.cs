@@ -14,7 +14,7 @@ namespace ReportCompiler.WPF.Services
             UserDialog = userDialog;
         }
 
-        public bool CanOpen(string path) => File.Exists(path);
+        public bool Exists(string path) => File.Exists(path);
         public bool Open(string path)
         {
             try

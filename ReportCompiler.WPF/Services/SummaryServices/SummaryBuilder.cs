@@ -3,6 +3,7 @@ using ReportCompiler.WPF.Models.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ReportCompiler.WPF.Services.SummaryServices
 {
@@ -31,13 +32,23 @@ namespace ReportCompiler.WPF.Services.SummaryServices
                 if (report != null)
                 {
                     var row = cell.Start.Row;
-                    sheet.Cells[$"D{row}"].Value = report.Declarations;
-                    sheet.Cells[$"E{row}"].Value = report.IssuedOrders;
-                    sheet.Cells[$"F{row}"].Value = report.Agreements;
-                    sheet.Cells[$"G{row}"].Value = report.RequestsSent;
-                    sheet.Cells[$"H{row}"].Value = report.RepliesReceviedNo;
-                    sheet.Cells[$"I{row}"].Value = report.RepliesReceviedYes;
-                    sheet.Cells[$"J{row}"].Value = report.Inspections;
+                    sheet.Cells[$"D{row}"].Value = Regex.Replace(report.Declarations, @"\s+", " ");
+                    sheet.Cells[$"E{row}"].Value = Regex.Replace(report.IssuedOrders, @"\s+", " ");
+                    sheet.Cells[$"F{row}"].Value = Regex.Replace(report.Agreements, @"\s+", " ");
+                    sheet.Cells[$"G{row}"].Value = Regex.Replace(report.RequestsSent, @"\s+", " ");
+                    sheet.Cells[$"H{row}"].Value = Regex.Replace(report.RepliesReceviedNo, @"\s+", " ");
+                    sheet.Cells[$"I{row}"].Value = Regex.Replace(report.RepliesReceviedYes, @"\s+", " ");
+                    sheet.Cells[$"J{row}"].Value = Regex.Replace(report.Inspections, @"\s+", " ");
+
+                    sheet.Cells[$"D{row}"].Style.WrapText = true;
+                    sheet.Cells[$"E{row}"].Style.WrapText = true;
+                    sheet.Cells[$"F{row}"].Style.WrapText = true;
+                    sheet.Cells[$"G{row}"].Style.WrapText = true;
+                    sheet.Cells[$"H{row}"].Style.WrapText = true;
+                    sheet.Cells[$"I{row}"].Style.WrapText = true;
+                    sheet.Cells[$"J{row}"].Style.WrapText = true;
+
+                    sheet.Row(row).CustomHeight = false;
                 }
             }
         }
@@ -47,7 +58,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             sheet.Cells["A40"].Value = $"за {Year} год";
             sheet.Cells["A40"].Style.Font.Bold = true;
 
-            sheet.Cells["A41"].Value = $"{CompileDate:Y}";
+            sheet.Cells["A41"].Value = $"{CompileDate.AddMonths(-1):Y}";
             sheet.Cells["A41"].Style.Font.Bold = true;
 
             sheet.Cells["J40"].Value = $"на {CompileDate:d} проведено проверок";

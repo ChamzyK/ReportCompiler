@@ -35,11 +35,11 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
 
             if (SelectedItem.Type == DirectoryItemType.ExcelFile && FileService != null)
             {
-                return FileService.CanOpen(SelectedItem.Path);
+                return FileService.Exists(SelectedItem.Path);
             }
             else if (DirectoryService != null)
             {
-                return DirectoryService.CanSelectDirectory(SelectedItem);
+                return DirectoryService.Exists(SelectedItem.Path);
             }
 
             return false;

@@ -1,9 +1,12 @@
 ﻿using OfficeOpenXml;
 using ReportCompiler.WPF.Models.Reports;
 using ReportCompiler.WPF.Services.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ReportCompiler.WPF.Services.SummaryServices
 {
@@ -17,38 +20,46 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             var data = ReportReader.ReadNotEmptyCells(sheet);
 
             var isCorrect = true;
-            var comment = string.Empty; 
+            var comment = string.Empty;
+
+            var (template, templateCell) = ReportReader.GetTemplate(data);
+            var (row, column) = template.GetStartCell(templateCell);
 
             if (string.IsNullOrWhiteSpace(ReportReader.GetDistrict(excelPackage)))
             {
                 isCorrect = false;
-                comment += "Имя файла.\n";
+                comment += "В имени файла.\n";
             }
 
-            for (int i = 0; i < 6; i++)
-            {
-                if (sheet.Cells[10, 2 + i].Value == null)
-                {
-                    isCorrect = false;
-                    comment += $"Ячейка: {(char)('B' + i)}10.\n";
-                    continue;
-                }
+            var columnCount = template == TemplateType.Empty ? 5 : 6;
 
-                if (!sheet.Cells[10, 2 + i].Value.ToString().Any(symbol => char.IsDigit(symbol)))
+            for (int i = 0; i < columnCount; i++)
+            {
+                var cell = sheet.Cells[row, column + i];
+                if (cell == null || cell.Value == null || !IsValidCell(cell.Value.ToString()))
                 {
                     isCorrect = false;
-                    comment += $"Ячейка: {(char)('B' + i)}10.\n";
+                    comment += $"Ячейка {(char)('B' + i)}{row}.\n";
                 }
             }
 
-            if(sheet.Cells[13,2].Value == null)
-            {
-                isCorrect = false;
-                comment += $"Ячейка: B13.\n";
-            }
 
-            return new ReportInfo(fileInfo.Name, fileInfo.FullName, isCorrect, comment);
+            return new ReportInfo
+            {
+                Name = fileInfo.Name,
+                Path = fileInfo.FullName,
+                IsCorrect = isCorrect,
+                Comment = comment,
+                Template = template,
+                StartCellAddress = (row, column)
+            };
         }
+
+        private static bool IsValidCell(string value)
+        {
+            return value.Contains("нет") || value.Any(symbol => char.IsDigit(symbol));
+        }
+
 
         public List<ReportInfo> GetReportInfos(string dirPath)
         {
@@ -61,7 +72,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             return result;
         }
         private static List<string> GetExcelFiles(string path) => Directory.EnumerateFiles(path)
-            .Where(path => !path.Contains("~$") && path.Contains("xlsx"))
+            .Where(path => !path.Contains("~$") && path.Contains(".xlsx"))
             .ToList()
         ;
 
@@ -71,24 +82,34 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             using var readPackage = new ExcelPackage(fileInfo);
             var sheet = readPackage.Workbook.Worksheets[0];
 
-            var data = ReportReader.ReadNotEmptyCells(sheet);
+            var (row, column) = reportInfo.StartCellAddress;
+
+            var columnCount = reportInfo.Template == TemplateType.Empty ? 5 : 6;
+            var array = new string[columnCount];
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = sheet.Cells[row, column + i].Value.ToString();
+            }
 
             return new Report
             {
                 District = ReportReader.GetDistrict(readPackage),
-                Declarations = ReportReader.ReadDeclaration(sheet),
-                IssuedOrders = ReportReader.ReadIssuedOrders(sheet),
-                Agreements = ReportReader.ReadAgreements(sheet),
-                RequestsSent = ReportReader.ReadRequestsSent(sheet),
-                RepliesReceviedNo = ReportReader.ReadRepliesReceviedNo(sheet),
-                RepliesReceviedYes = ReportReader.ReadRepliesReceviedYes(sheet),
-                Inspections = ReportReader.ReadInspections(sheet)
+                Declarations = Regex.Replace(array[0], @"\([^)]+\)", string.Empty),
+                IssuedOrders = array[1],
+                Agreements = array[2],
+                RequestsSent = array[3],
+                RepliesReceviedNo = reportInfo.Template == TemplateType.Empty && array[4].Contains("да") ? "0" : array[4],
+                RepliesReceviedYes = reportInfo.Template == TemplateType.Empty ? (array[4].Contains("нет") ? "0" : array[4]) : array[5],
+                Inspections = "NotImplemented"
             };
         }
 
         public string CompileSummary(List<Report> reports, MetaData metaData)
         {
-            var summary = new FileInfo($"{metaData.Name}.xlsx");
+            var reportsDirPath = Path.Combine(Environment.CurrentDirectory, "Отчеты");
+            var monthDirPath = Path.Combine(reportsDirPath, metaData.Month);
+            var summary = new FileInfo(Path.Combine(monthDirPath, $"{metaData.Name}.xlsx"));
             var summaryTemplate = new FileInfo("main_report_template.xltx");
 
             using var writePackage = new ExcelPackage(summary, summaryTemplate);
