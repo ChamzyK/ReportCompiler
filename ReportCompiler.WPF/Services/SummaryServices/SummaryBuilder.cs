@@ -53,7 +53,8 @@ namespace ReportCompiler.WPF.Services.SummaryServices
                     SetCellBackground(sheet.Cells[$"I{row}"]);
                     SetCellBackground(sheet.Cells[$"J{row}"]);
 
-                    if (sheet.Cells[$"C{row}"].Value != null && (int)sheet.Cells[$"C{row}"].Value != 0)
+                    if ((sheet.Cells[$"C{row}"].Value != null && sheet.Cells[$"C{row}"].Value is int && (int)sheet.Cells[$"C{row}"].Value != 0) ||
+                        sheet.Cells[$"C{row}"].Style.Fill.BackgroundColor.Rgb == ColorHexValue(Color.Red))
                     {
                         FillCell(sheet.Cells[$"D{row}"], report.Declarations);
                     }
@@ -63,9 +64,14 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             }
         }
 
+        private string ColorHexValue(Color color)
+        {
+            return color.A.ToString("X2") + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
+        }
+
         private static void SetCellBackground(ExcelRange cell)
         {
-            if (cell.Value != null && (int)cell.Value != 0)
+            if (cell.Value != null && cell.Value is int && (int)cell.Value != 0)
             {
                 cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 cell.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
@@ -102,6 +108,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             }
             else
             {
+                cell.Value = value;
                 cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 cell.Style.Fill.BackgroundColor.SetColor(Color.Red);
             }
@@ -142,12 +149,19 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             if (prevMonthFile != null)
             {
                 using var prevSummarySheet = new ExcelPackage(prevMonthFile).Workbook.Worksheets[0];
+                prevSummarySheet.Cells["C39"].Calculate();
                 currentSummarySheet.Cells["C41"].Value = prevSummarySheet.Cells["C39"].Value;
+                prevSummarySheet.Cells["E39"].Calculate();
                 currentSummarySheet.Cells["E41"].Value = prevSummarySheet.Cells["E39"].Value;
+                prevSummarySheet.Cells["F39"].Calculate();
                 currentSummarySheet.Cells["F41"].Value = prevSummarySheet.Cells["F39"].Value;
+                prevSummarySheet.Cells["G39"].Calculate();
                 currentSummarySheet.Cells["G41"].Value = prevSummarySheet.Cells["G39"].Value;
+                prevSummarySheet.Cells["H39"].Calculate();
                 currentSummarySheet.Cells["H41"].Value = prevSummarySheet.Cells["H39"].Value;
+                prevSummarySheet.Cells["I39"].Calculate();
                 currentSummarySheet.Cells["I41"].Value = prevSummarySheet.Cells["I39"].Value;
+                prevSummarySheet.Cells["J39"].Calculate();
                 currentSummarySheet.Cells["J41"].Value = prevSummarySheet.Cells["J39"].Value;
             }
             else
