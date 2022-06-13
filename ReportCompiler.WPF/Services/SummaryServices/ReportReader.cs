@@ -77,11 +77,12 @@ namespace ReportCompiler.WPF.Services.SummaryServices
 
             var fifthTemplateCell = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Contains("поступило"));
 
+
             if (firstTemplateCell != null) return (TemplateType.WithMonths, firstTemplateCell);
             else if (secondTemplateCell != null) return (TemplateType.WithX, secondTemplateCell);
             else if (thirdTemplateCellNo != null && thirdTemplateCellYes != null) return (TemplateType.WithNoYes, thirdTemplateCellNo);
-            else if (forthTemplateCell != null && forthTemplateCell.End.Column == 6) return (TemplateType.Empty, forthTemplateCell);
-            else if (fifthTemplateCell != null && secondTemplateCell != null) return (TemplateType.WithoutX, secondTemplateCell);
+            else if (forthTemplateCell != null && !forthTemplateCell.Merge) return (TemplateType.Empty, forthTemplateCell);
+            else if (fifthTemplateCell != null) return (TemplateType.WithoutX, fifthTemplateCell);
 
             throw new System.Exception("Не удалось определить шаблон");
         }

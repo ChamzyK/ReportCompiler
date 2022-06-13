@@ -26,7 +26,7 @@ namespace ReportCompiler.WPF.Models.Reports
                 row = cell.End.Row + 1;
                 column = cell.End.Column;
             }
-            else if (template == TemplateType.WithX || template == TemplateType.WithoutX)
+            else if (template == TemplateType.WithX)
             {
                 row = cell.End.Row - 1;
                 column = cell.End.Column;
@@ -40,6 +40,11 @@ namespace ReportCompiler.WPF.Models.Reports
             {
                 row = cell.End.Row + 1;
                 column = cell.Start.Column - 4;
+            }
+            else if(template == TemplateType.WithoutX)
+            {
+                row = cell.End.Row + 2;
+                column = cell.End.Column;
             }
             else
             {
