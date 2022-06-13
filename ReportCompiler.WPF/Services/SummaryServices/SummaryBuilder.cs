@@ -38,7 +38,6 @@ namespace ReportCompiler.WPF.Services.SummaryServices
 
 
                     FillNumberCell(sheet.Cells[$"C{row}"], report.Declarations);
-                    FillCell(sheet.Cells[$"D{row}"], report.Declarations);
                     FillNumberCell(sheet.Cells[$"E{row}"], report.IssuedOrders);
                     FillNumberCell(sheet.Cells[$"F{row}"], report.Agreements);
                     FillNumberCell(sheet.Cells[$"G{row}"], report.RequestsSent);
@@ -54,6 +53,10 @@ namespace ReportCompiler.WPF.Services.SummaryServices
                     SetCellBackground(sheet.Cells[$"I{row}"]);
                     SetCellBackground(sheet.Cells[$"J{row}"]);
 
+                    if (sheet.Cells[$"C{row}"].Value != null && (int)sheet.Cells[$"C{row}"].Value != 0)
+                    {
+                        FillCell(sheet.Cells[$"D{row}"], report.Declarations);
+                    }
 
                     sheet.Row(row).CustomHeight = false;
                 }
@@ -136,14 +139,41 @@ namespace ReportCompiler.WPF.Services.SummaryServices
 
         public void FillPrevMonthInfo(ExcelWorksheet currentSummarySheet, FileInfo prevMonthFile)
         {
-            using var prevSummarySheet = new ExcelPackage(prevMonthFile).Workbook.Worksheets[0];
-            currentSummarySheet.Cells["C41"].Value = prevSummarySheet.Cells["C39"].Value;
-            currentSummarySheet.Cells["E41"].Value = prevSummarySheet.Cells["E39"].Value;
-            currentSummarySheet.Cells["F41"].Value = prevSummarySheet.Cells["F39"].Value;
-            currentSummarySheet.Cells["G41"].Value = prevSummarySheet.Cells["G39"].Value;
-            currentSummarySheet.Cells["H41"].Value = prevSummarySheet.Cells["H39"].Value;
-            currentSummarySheet.Cells["I41"].Value = prevSummarySheet.Cells["I39"].Value;
-            currentSummarySheet.Cells["J41"].Value = prevSummarySheet.Cells["J39"].Value;
+            if (prevMonthFile != null)
+            {
+                using var prevSummarySheet = new ExcelPackage(prevMonthFile).Workbook.Worksheets[0];
+                currentSummarySheet.Cells["C41"].Value = prevSummarySheet.Cells["C39"].Value;
+                currentSummarySheet.Cells["E41"].Value = prevSummarySheet.Cells["E39"].Value;
+                currentSummarySheet.Cells["F41"].Value = prevSummarySheet.Cells["F39"].Value;
+                currentSummarySheet.Cells["G41"].Value = prevSummarySheet.Cells["G39"].Value;
+                currentSummarySheet.Cells["H41"].Value = prevSummarySheet.Cells["H39"].Value;
+                currentSummarySheet.Cells["I41"].Value = prevSummarySheet.Cells["I39"].Value;
+                currentSummarySheet.Cells["J41"].Value = prevSummarySheet.Cells["J39"].Value;
+            }
+            else
+            {
+                currentSummarySheet.Cells["C41"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                currentSummarySheet.Cells["C41"].Style.Fill.BackgroundColor.SetColor(Color.Red);
+
+                currentSummarySheet.Cells["E41"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                currentSummarySheet.Cells["C41"].Style.Fill.BackgroundColor.SetColor(Color.Red);
+
+                currentSummarySheet.Cells["F41"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                currentSummarySheet.Cells["C41"].Style.Fill.BackgroundColor.SetColor(Color.Red);
+
+                currentSummarySheet.Cells["G41"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                currentSummarySheet.Cells["C41"].Style.Fill.BackgroundColor.SetColor(Color.Red);
+
+                currentSummarySheet.Cells["H41"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                currentSummarySheet.Cells["C41"].Style.Fill.BackgroundColor.SetColor(Color.Red);
+
+                currentSummarySheet.Cells["I41"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                currentSummarySheet.Cells["C41"].Style.Fill.BackgroundColor.SetColor(Color.Red);
+
+                currentSummarySheet.Cells["J41"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                currentSummarySheet.Cells["C41"].Style.Fill.BackgroundColor.SetColor(Color.Red);
+
+            }
         }
 
         public void FillHeaderInfo(ExcelWorksheet sheet)
@@ -156,7 +186,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             tailRichText.Bold = false;
 
 
-            sheet.Cells["G2"].Value = $"Ежемесячно за {Month}" +
+            sheet.Cells["G2"].Value = $"Ежемесячно за {Month.Split(' ')[1]}" +
                 "\nПредоставляется: до 5 числа месяца, следующего за отчетным";
 
 

@@ -142,16 +142,13 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             builder.FillDistrictInfo(sheet);
             builder.FillBottomInfo(sheet);
 
-            var prevMonthFile = GetPrevMonthSheet((Month)metaData.Month);
-            if (prevMonthFile != null)
-            {
-                builder.FillPrevMonthInfo(sheet, prevMonthFile);
-            }
+            var prevMonthFile = GetPrevMonthFile((Month)metaData.Month);
+            builder.FillPrevMonthInfo(sheet, prevMonthFile);
 
             writePackage.SaveAs(summary);
         }
 
-        private FileInfo? GetPrevMonthSheet(Month month)
+        private FileInfo? GetPrevMonthFile(Month month)
         {
             var summaryDirPath = ((Month)(int)(month != Month.January ? month - 1 : Month.December)).GetSummaryDirPath();
             var prevSummaryFiles = DirectoryService.GetExcelFiles(summaryDirPath);
