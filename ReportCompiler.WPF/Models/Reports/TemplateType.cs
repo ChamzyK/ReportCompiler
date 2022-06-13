@@ -41,11 +41,6 @@ namespace ReportCompiler.WPF.Models.Reports
                 row = cell.End.Row + 1;
                 column = cell.Start.Column - 4;
             }
-            else if(template == TemplateType.WithoutX)
-            {
-                row = cell.End.Row + 2;
-                column = cell.End.Column;
-            }
             else
             {
                 throw new System.Exception("Не удалось определить шаблон");

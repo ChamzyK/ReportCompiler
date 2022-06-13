@@ -81,7 +81,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             else if (secondTemplateCell != null) return (TemplateType.WithX, secondTemplateCell);
             else if (thirdTemplateCellNo != null && thirdTemplateCellYes != null) return (TemplateType.WithNoYes, thirdTemplateCellNo);
             else if (forthTemplateCell != null && forthTemplateCell.End.Column == 6) return (TemplateType.Empty, forthTemplateCell);
-            else if (fifthTemplateCell != null) return (TemplateType.WithoutX, fifthTemplateCell);
+            else if (fifthTemplateCell != null && secondTemplateCell != null) return (TemplateType.WithoutX, secondTemplateCell);
 
             throw new System.Exception("Не удалось определить шаблон");
         }

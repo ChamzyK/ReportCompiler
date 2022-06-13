@@ -1,7 +1,9 @@
 ﻿using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using ReportCompiler.WPF.Models.Reports;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -35,35 +37,86 @@ namespace ReportCompiler.WPF.Services.SummaryServices
                     var row = cell.Start.Row;
 
 
-                    FillCell(sheet.Cells[$"C{row}"], report.Declarations);
-                    FillCell(sheet.Cells[$"E{row}"], report.IssuedOrders);
-                    FillCell(sheet.Cells[$"F{row}"], report.Agreements);
-                    FillCell(sheet.Cells[$"G{row}"], report.RequestsSent);
-                    FillCell(sheet.Cells[$"H{row}"], report.RepliesReceviedNo);
-                    FillCell(sheet.Cells[$"I{row}"], report.RepliesReceviedYes);
-                    FillCell(sheet.Cells[$"J{row}"], report.Inspections);
+                    FillNumberCell(sheet.Cells[$"C{row}"], report.Declarations);
+                    FillCell(sheet.Cells[$"D{row}"], report.Declarations);
+                    FillNumberCell(sheet.Cells[$"E{row}"], report.IssuedOrders);
+                    FillNumberCell(sheet.Cells[$"F{row}"], report.Agreements);
+                    FillNumberCell(sheet.Cells[$"G{row}"], report.RequestsSent);
+                    FillNumberCell(sheet.Cells[$"H{row}"], report.RepliesReceviedNo);
+                    FillNumberCell(sheet.Cells[$"I{row}"], report.RepliesReceviedYes);
+                    FillNumberCell(sheet.Cells[$"J{row}"], report.Inspections);
+
+                    SetCellBackground(sheet.Cells[$"C{row}"]);
+                    SetCellBackground(sheet.Cells[$"E{row}"]);
+                    SetCellBackground(sheet.Cells[$"F{row}"]);
+                    SetCellBackground(sheet.Cells[$"G{row}"]);
+                    SetCellBackground(sheet.Cells[$"H{row}"]);
+                    SetCellBackground(sheet.Cells[$"I{row}"]);
+                    SetCellBackground(sheet.Cells[$"J{row}"]);
 
 
-                    sheet.Row(row).CustomHeight = false; 
+                    sheet.Row(row).CustomHeight = false;
                 }
             }
         }
 
-        private void FillCell(ExcelRange cell, string value)
+        private static void SetCellBackground(ExcelRange cell)
         {
-            string pattern = @"(\d*)";
-            var regex = new Regex(pattern);
+            if (cell.Value != null && (int)cell.Value != 0)
+            {
+                cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                cell.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+            }
+        }
 
+
+        private static void FillCell(ExcelRange cell, string value)
+        {
+            var noSpaces = Regex.Replace(value, @"(\s+)", " ");
+            cell.Value = noSpaces;
+        }
+
+        private static void FillNumberCell(ExcelRange cell, string value)
+        {
+            var allSum = GetSum(value);
+
+            var withoutBrackets = Regex.Replace(value, @"\((.*?)\)", "");
+            var outSum = GetSum(withoutBrackets);
+
+            var insideBrackets = Regex.Match(value, @"\((.*?)\)").Value;
+            var inSum = GetSum(insideBrackets);
+
+
+            if (outSum == allSum || allSum == outSum * 2)
+            {
+                cell.Style.Numberformat.Format = "0";
+                cell.Value = outSum;
+            }
+            else if (inSum == allSum)
+            {
+                cell.Style.Numberformat.Format = "0";
+                cell.Value = inSum;
+            }
+            else
+            {
+                cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                cell.Style.Fill.BackgroundColor.SetColor(Color.Red);
+            }
+        }
+
+        private static int GetSum(string value)
+        {
+            var regex = new Regex(@"(\d*)");
             var sum = 0;
-            foreach (Match match in regex.Matches(Regex.Replace(value, @"\s+", " ")))
+            foreach (Match match in regex.Matches(value))
             {
                 if (int.TryParse(match.Groups[1].Value, out int temp))
                 {
                     sum += temp;
                 }
             }
-            cell.Style.Numberformat.Format = "0";
-            cell.Value = sum;
+
+            return sum;
         }
 
         public void FillBottomInfo(ExcelWorksheet sheet)

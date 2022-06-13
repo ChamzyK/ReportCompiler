@@ -79,7 +79,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             return result;
         }
 
-        public Report ConvertToReport(ReportInfo reportInfo)
+        public static Report ConvertToReport(ReportInfo reportInfo)
         {
             var fileInfo = new FileInfo(reportInfo.Path);
             using var readPackage = new ExcelPackage(fileInfo);
@@ -98,7 +98,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             return new Report
             {
                 District = ReportReader.GetDistrict(readPackage),
-                Declarations = Regex.Replace(array[0], @"\([^)]+\)", string.Empty),
+                Declarations = array[0],
                 IssuedOrders = array[1],
                 Agreements = array[2],
                 RequestsSent = array[3],
