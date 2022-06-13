@@ -1,6 +1,7 @@
 ﻿using OfficeOpenXml;
 using ReportCompiler.WPF.Models.Reports;
 using ReportCompiler.WPF.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
 
         public ReportInfo? GetReportInfo(string filePath)
         {
-            if(!File.Exists(filePath)) return null;
+            if (!File.Exists(filePath)) return null;
             var fileInfo = new FileInfo(filePath);
             using var excelPackage = new ExcelPackage(fileInfo);
             var sheet = excelPackage.Workbook.Worksheets[0];
@@ -158,8 +159,14 @@ namespace ReportCompiler.WPF.Services.SummaryServices
 
             var prevMonthFile = GetPrevMonthFile((Month)metaData.Month);
             builder.FillPrevMonthInfo(sheet, prevMonthFile);
-
-            writePackage.SaveAs(summary);
+            try
+            {
+                writePackage.SaveAs(summary);
+            }
+            catch (InvalidOperationException)
+            {
+                DialogService.ShowMessage("Ошибка доступа", "Закройте файл с таким же именем.");
+            }
         }
 
         private FileInfo? GetPrevMonthFile(Month month)
