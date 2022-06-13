@@ -2,6 +2,7 @@
 using ReportCompiler.WPF.Models.Reports;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -9,12 +10,12 @@ namespace ReportCompiler.WPF.Services.SummaryServices
 {
     internal class SummaryBuilder
     {
-        public List<Report> Reports { get; init; }
-        public MetaData MetaData { get; init; }
+        public List<Report> Reports { get; }
+        public MetaData MetaData { get; }
 
-        public string Year => MetaData.CompileDate.Year.ToString();
-        public DateTime CompileDate => MetaData.CompileDate;
-        public string Month => MetaData.Month;
+        public string Year => ((DateTime)MetaData.CompileDate).Year.ToString();
+        public DateTime CompileDate => ((DateTime)MetaData.CompileDate);
+        public string Month => ((Month)MetaData.Month).GetName();
 
         public SummaryBuilder(List<Report> reports, MetaData metaData)
         {
@@ -32,25 +33,37 @@ namespace ReportCompiler.WPF.Services.SummaryServices
                 if (report != null)
                 {
                     var row = cell.Start.Row;
-                    sheet.Cells[$"D{row}"].Value = Regex.Replace(report.Declarations, @"\s+", " ");
-                    sheet.Cells[$"E{row}"].Value = Regex.Replace(report.IssuedOrders, @"\s+", " ");
-                    sheet.Cells[$"F{row}"].Value = Regex.Replace(report.Agreements, @"\s+", " ");
-                    sheet.Cells[$"G{row}"].Value = Regex.Replace(report.RequestsSent, @"\s+", " ");
-                    sheet.Cells[$"H{row}"].Value = Regex.Replace(report.RepliesReceviedNo, @"\s+", " ");
-                    sheet.Cells[$"I{row}"].Value = Regex.Replace(report.RepliesReceviedYes, @"\s+", " ");
-                    sheet.Cells[$"J{row}"].Value = Regex.Replace(report.Inspections, @"\s+", " ");
 
-                    sheet.Cells[$"D{row}"].Style.WrapText = true;
-                    sheet.Cells[$"E{row}"].Style.WrapText = true;
-                    sheet.Cells[$"F{row}"].Style.WrapText = true;
-                    sheet.Cells[$"G{row}"].Style.WrapText = true;
-                    sheet.Cells[$"H{row}"].Style.WrapText = true;
-                    sheet.Cells[$"I{row}"].Style.WrapText = true;
-                    sheet.Cells[$"J{row}"].Style.WrapText = true;
 
-                    sheet.Row(row).CustomHeight = false;
+                    FillCell(sheet.Cells[$"C{row}"], report.Declarations);
+                    FillCell(sheet.Cells[$"E{row}"], report.IssuedOrders);
+                    FillCell(sheet.Cells[$"F{row}"], report.Agreements);
+                    FillCell(sheet.Cells[$"G{row}"], report.RequestsSent);
+                    FillCell(sheet.Cells[$"H{row}"], report.RepliesReceviedNo);
+                    FillCell(sheet.Cells[$"I{row}"], report.RepliesReceviedYes);
+                    FillCell(sheet.Cells[$"J{row}"], report.Inspections);
+
+
+                    sheet.Row(row).CustomHeight = false; 
                 }
             }
+        }
+
+        private void FillCell(ExcelRange cell, string value)
+        {
+            string pattern = @"(\d*)";
+            var regex = new Regex(pattern);
+
+            var sum = 0;
+            foreach (Match match in regex.Matches(Regex.Replace(value, @"\s+", " ")))
+            {
+                if (int.TryParse(match.Groups[1].Value, out int temp))
+                {
+                    sum += temp;
+                }
+            }
+            cell.Style.Numberformat.Format = "0";
+            cell.Value = sum;
         }
 
         public void FillBottomInfo(ExcelWorksheet sheet)
@@ -61,11 +74,23 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             sheet.Cells["A41"].Value = $"{CompileDate.AddMonths(-1):Y}";
             sheet.Cells["A41"].Style.Font.Bold = true;
 
-            sheet.Cells["J40"].Value = $"на {CompileDate:d} проведено проверок";
+            sheet.Cells["J40"].Value = $"на {CompileDate.AddMonths(-1):d} проведено проверок";
             sheet.Cells["J40"].Style.Font.Bold = true;
 
-            sheet.Cells["J42"].Value = $"на {CompileDate:d} из МСЭ не пришли ответы  на запросы ЦЗН";
+            sheet.Cells["J42"].Value = $"на {CompileDate.AddMonths(-1):d} из МСЭ не пришли ответы  на запросы ЦЗН";
             sheet.Cells["J42"].Style.Font.Bold = true;
+        }
+
+        public void FillPrevMonthInfo(ExcelWorksheet currentSummarySheet, FileInfo prevMonthFile)
+        {
+            using var prevSummarySheet = new ExcelPackage(prevMonthFile).Workbook.Worksheets[0];
+            currentSummarySheet.Cells["C41"].Value = prevSummarySheet.Cells["C39"].Value;
+            currentSummarySheet.Cells["E41"].Value = prevSummarySheet.Cells["E39"].Value;
+            currentSummarySheet.Cells["F41"].Value = prevSummarySheet.Cells["F39"].Value;
+            currentSummarySheet.Cells["G41"].Value = prevSummarySheet.Cells["G39"].Value;
+            currentSummarySheet.Cells["H41"].Value = prevSummarySheet.Cells["H39"].Value;
+            currentSummarySheet.Cells["I41"].Value = prevSummarySheet.Cells["I39"].Value;
+            currentSummarySheet.Cells["J41"].Value = prevSummarySheet.Cells["J39"].Value;
         }
 
         public void FillHeaderInfo(ExcelWorksheet sheet)

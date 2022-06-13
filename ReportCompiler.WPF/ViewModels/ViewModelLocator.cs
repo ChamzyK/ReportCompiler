@@ -5,8 +5,8 @@ namespace ReportCompiler.WPF.ViewModels
 {
     internal class ViewModelLocator
     {
-        public static MainViewModel MainViewModel => App.Services.GetRequiredService<MainViewModel>();
         public static MenuViewModel MenuViewModel => App.Services.GetRequiredService<MenuViewModel>();
-        public static ReportFormerViewModel ReportFormerViewModel => App.Services.GetRequiredService<ReportFormerViewModel>();
+        public static ReportsViewModel ReportsViewModel => App.Services.GetRequiredService<ReportsViewModel>();
+        public static MetaDataViewModel MetaDataViewModel => App.Services.GetRequiredService<MetaDataViewModel>();
     }
 }

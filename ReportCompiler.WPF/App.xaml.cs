@@ -10,6 +10,8 @@ namespace ReportCompiler.WPF
 {
     public partial class App : Application
     {
+        public static string CurrentDir => Environment.CurrentDirectory;
+
         public static Window? FocusedWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsFocused);
         public static Window? ActiveWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsActive);
 

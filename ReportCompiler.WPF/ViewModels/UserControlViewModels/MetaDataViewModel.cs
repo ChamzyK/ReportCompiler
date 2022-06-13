@@ -1,6 +1,7 @@
 ﻿using ReportCompiler.WPF.Models.Reports;
 using ReportCompiler.WPF.ViewModels.Base;
 using System;
+using System.Collections.Generic;
 
 namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
 {
@@ -10,6 +11,8 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
         private DateTime? compileDate;
         private string? mainReportName;
         private bool isAnotherDate;
+
+        public List<string> Months { get; }
 
         public bool IsAnotherDate
         {
@@ -40,8 +43,6 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
             }
         }
 
-        public string[] Months { get; }
-
         public bool IsValidMetaData
         {
             get
@@ -51,36 +52,21 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
                     (SelectedMonth != null);
             }
         }
-        public MetaData MetaData
+        public MetaData MetaData => new()
         {
-            get
-            {
-                var month = SelectedMonth ?? DateTime.Now.ToString("MMMM");
-                month = char.ToUpper(month[0]).ToString() + month[1..];
-                var name = Name ?? $"Сводный отчет за {DateTime.Now:MMMM}";
-                var date = IsAnotherDate && CompileDate != null ? (DateTime)CompileDate : DateTime.Now;
-
-                return new MetaData(month, name, date);
-            }
-        }
+            Month = SelectedMonth.GetMonth(),
+            Name = Name,
+            CompileDate = IsAnotherDate ? CompileDate : DateTime.Now
+        };
 
         public MetaDataViewModel()
         {
-            Months = new string[]
+            Months = new List<string>();
+
+            foreach (Month month in Enum.GetValues(typeof(Month)))
             {
-                "Январь",
-                "Февраль",
-                "Март",
-                "Апрель",
-                "Май",
-                "Июнь",
-                "Июль",
-                "Август",
-                "Сентябрь",
-                "Октябрь",
-                "Ноябрь",
-                "Декабрь"
-            };
+                Months.Add(month.GetName());
+            }
         }
     }
 }

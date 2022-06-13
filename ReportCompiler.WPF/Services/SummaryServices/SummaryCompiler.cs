@@ -1,9 +1,7 @@
 ﻿using OfficeOpenXml;
 using ReportCompiler.WPF.Models.Reports;
 using ReportCompiler.WPF.Services.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -12,6 +10,16 @@ namespace ReportCompiler.WPF.Services.SummaryServices
 {
     internal class SummaryCompiler : ISummaryCompiler
     {
+        public IDirectory DirectoryService { get; }
+        public IUserDialog DialogService { get; }
+        public List<Report>? Reports { get; set; }
+
+        public SummaryCompiler(IDirectory directoryService, IUserDialog dialogService)
+        {
+            DirectoryService = directoryService;
+            DialogService = dialogService;
+        }
+
         public ReportInfo GetReportInfo(string filePath)
         {
             var fileInfo = new FileInfo(filePath);
@@ -43,7 +51,6 @@ namespace ReportCompiler.WPF.Services.SummaryServices
                 }
             }
 
-
             return new ReportInfo
             {
                 Name = fileInfo.Name,
@@ -63,18 +70,14 @@ namespace ReportCompiler.WPF.Services.SummaryServices
 
         public List<ReportInfo> GetReportInfos(string dirPath)
         {
-            var excelFiles = GetExcelFiles(dirPath);
+            var excelFiles = DirectoryService.GetExcelFiles(dirPath);
             var result = new List<ReportInfo>();
             foreach (var filePath in excelFiles)
             {
-                result.Add(GetReportInfo(filePath));
+                result.Add(GetReportInfo(filePath.Path));
             }
             return result;
         }
-        private static List<string> GetExcelFiles(string path) => Directory.EnumerateFiles(path)
-            .Where(path => !path.Contains("~$") && path.Contains(".xlsx"))
-            .ToList()
-        ;
 
         public Report ConvertToReport(ReportInfo reportInfo)
         {
@@ -105,26 +108,59 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             };
         }
 
-        public string CompileSummary(List<Report> reports, MetaData metaData)
+        public void CompileSummary(MetaData metaData)
         {
-            var reportsDirPath = Path.Combine(Environment.CurrentDirectory, "Отчеты");
-            var monthDirPath = Path.Combine(reportsDirPath, metaData.Month);
-            var summary = new FileInfo(Path.Combine(monthDirPath, $"{metaData.Name}.xlsx"));
+            var month = ((Month)metaData.Month);
+            var reportInfos = GetReportInfos(month.GetDirPath());
+            var incorrectReports = reportInfos.Where(reportInfo => !reportInfo.IsCorrect);
+
+            if (incorrectReports.Any())
+            {
+                DialogService.ShowIncorrectReports(incorrectReports.ToList());
+            }
+            else
+            {
+                Reports = reportInfos.Select(info => ConvertToReport(info)).ToList();
+                CreateSummary(metaData);
+                DialogService.ShowSuccessResult(Path.Combine(month.GetSummaryDirPath(), $"{metaData.Name}.xlsx"));
+            }
+        }
+
+        private void CreateSummary(MetaData metaData)
+        {
+            var month = (Month)metaData.Month;
+            var summary = new FileInfo(Path.Combine(month.GetSummaryDirPath(), $"{metaData.Name}.xlsx"));
             var summaryTemplate = new FileInfo("main_report_template.xltx");
 
             using var writePackage = new ExcelPackage(summary, summaryTemplate);
 
             var sheet = writePackage.Workbook.Worksheets["Сводный отчет"];
 
-            var builder = new SummaryBuilder(reports, metaData);
+            var builder = new SummaryBuilder(Reports, metaData);
 
             builder.FillHeaderInfo(sheet);
             builder.FillDistrictInfo(sheet);
             builder.FillBottomInfo(sheet);
 
-            writePackage.SaveAs(summary);
+            var prevMonthFile = GetPrevMonthSheet((Month)metaData.Month);
+            if (prevMonthFile != null)
+            {
+                builder.FillPrevMonthInfo(sheet, prevMonthFile);
+            }
 
-            return summary.FullName;
+            writePackage.SaveAs(summary);
+        }
+
+        private FileInfo? GetPrevMonthSheet(Month month)
+        {
+            var summaryDirPath = ((Month)(int)(month != Month.January ? month - 1 : Month.December)).GetSummaryDirPath();
+            var prevSummaryFiles = DirectoryService.GetExcelFiles(summaryDirPath);
+
+            if(prevSummaryFiles != null && prevSummaryFiles.Any())
+            {
+               return new FileInfo(prevSummaryFiles.FirstOrDefault().Path);
+            }
+            return null;
         }
     }
 }

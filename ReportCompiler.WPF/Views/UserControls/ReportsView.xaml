@@ -19,7 +19,7 @@
                 <ColumnDefinition Width="65"/>
             </Grid.ColumnDefinitions>
 
-            <Button 
+            <Button
                 Grid.Row="1"
                 Grid.Column="1"
                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
@@ -28,6 +28,7 @@
                 ToolTip="Обновить"
                 Panel.ZIndex="9999"
                 Command="{Binding RefreshReportsCommand}"
+                CommandParameter="{Binding Source={StaticResource Locator}, Path=MetaDataViewModel.SelectedMonth}"
                 Content="{md:PackIcon Refresh, Size=20}"/>
 
 

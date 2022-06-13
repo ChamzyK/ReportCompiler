@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         
-        DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
-        Title="{Binding Title}"
-        Height="575" Width="725"
+        Title="ReportCompiler"
+        Height="575" Width="700"
         MinHeight="500" MinWidth="675"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource MaterialDesignWindow}">
@@ -60,9 +59,9 @@
                     <Button 
                         DockPanel.Dock="Bottom"
                         Content="Составить сводный отчет" 
-                        Command="{Binding CreateReportCommand}"
-                        DataContext="{Binding Source={StaticResource Locator}, Path=ReportFormerViewModel}"/>
-                    <GroupBox DataContext="{Binding MetaDataViewModel}">
+                        Command="{StaticResource CreateReportCommand}"
+                        CommandParameter="{Binding Source={StaticResource Locator}, Path=MetaDataViewModel}"/>
+                    <GroupBox DataContext="{Binding Source={StaticResource Locator}, Path=MetaDataViewModel}">
                         <GroupBox.Header>
                             <TextBlock
                                 Style="{DynamicResource MaterialDesignSubtitle2TextBlock}"
@@ -74,7 +73,7 @@
                     </GroupBox>
                 </DockPanel>
 
-                <GroupBox DataContext="{Binding DirectoriesViewModel}">
+                <GroupBox DataContext="{Binding Source={StaticResource Locator}, Path=ReportsViewModel}">
                     <GroupBox.Header>
                         <TextBlock 
                             Style="{DynamicResource MaterialDesignSubtitle2TextBlock}"

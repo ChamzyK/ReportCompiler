@@ -1,85 +1,17 @@
 ﻿using ReportCompiler.WPF.Models.Directories;
+using ReportCompiler.WPF.Models.Reports;
 using ReportCompiler.WPF.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security;
 
 namespace ReportCompiler.WPF.Services
 {
     internal class DirectoryService : IDirectory
     {
-        public IUserDialog UserDialog { get; set; }
-        public ICollection<DirectoryItem> DirectoryContent { get; }
-        public DirectoryInfo? DirectoryInfo { get; private set; }
-
-        public DirectoryService(DirectoryItem directoryItem, IUserDialog userDialog, ICollection<DirectoryItem> directoryContent)
-        {
-            UserDialog = userDialog;
-            DirectoryContent = directoryContent;
-
-            SelectDirectory(directoryItem);
-        }
-
-        public bool SelectDirectory(DirectoryItem browserItem)
-        {
-            try
-            {
-                if (!Directory.Exists(browserItem.Path)) return false;
-                DirectoryInfo = new DirectoryInfo(browserItem.Path);
-
-                DirectoryContent.Clear();
-
-                AddCurrent();
-                AddItems(DirectoryNames, DirectoryItemType.Directory);
-                AddItems(ExcelFileNames, DirectoryItemType.ExcelFile);
-
-                return true;
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                UserDialog.ShowMessage("Ошибка доступа", e.Message);
-                return false;
-            }
-            catch (SecurityException e)
-            {
-                UserDialog.ShowMessage("Ошибка безопасности", e.Message);
-                return false;
-            }
-        }
         public bool Exists(string path) => Directory.Exists(path);
-
-        private string[] DirectoryNames => DirectoryInfo == null 
-            ? Array.Empty<string>() 
-            : Directory.GetDirectories(DirectoryInfo.FullName);
-
-        private string[] ExcelFileNames => DirectoryInfo == null 
-            ? Array.Empty<string>() 
-            : Directory.GetFiles(DirectoryInfo.FullName, "*.xls?");
-
-        private void AddCurrent()
-        {
-            if (DirectoryInfo == null || DirectoryInfo.Parent == null) return;
-
-            var name = DirectoryInfo.Name;
-            var path = DirectoryInfo.Parent.FullName;
-            var type = DirectoryItemType.ParentDirectory;
-
-            var parent = new DirectoryItem(name, path, type);
-            DirectoryContent.Add(parent);
-        }
-        private void AddItems(string[] itemNames, DirectoryItemType itemsType)
-        {
-            var directoryItems = itemNames
-                .Select(name => new DirectoryItem(Path.GetFileName(name), name, itemsType));
-
-            foreach (var item in directoryItems)
-            {
-                DirectoryContent.Add(item);
-            }
-        }
 
         public void OpenDirectory(string path)
         {
@@ -90,6 +22,33 @@ namespace ReportCompiler.WPF.Services
                 UseShellExecute = true
             };
             Process.Start(psInfo);
+        }
+
+        public IList<DirectoryItem> GetExcelFiles(string dirPath) => Directory.EnumerateFiles(dirPath)
+            .Where(path => !path.Contains("~$") && path.Contains(".xlsx"))
+            .Select(filePath => new DirectoryItem(Path.GetFileName(filePath), filePath, DirectoryItemType.ExcelFile))
+            .ToList();
+
+        public void CreateReportsDirectories()
+        {
+            var currDir = App.CurrentDir;
+            var reportsDir = Directory.CreateDirectory(Path.Combine(currDir, "Отчеты"));
+
+            foreach (Month month in Enum.GetValues(typeof(Month)))
+            {
+                CreateReportsDirectory(reportsDir, month.GetName());
+            }
+        }
+
+        private static void CreateReportsDirectory(DirectoryInfo reportsDir, string month)
+        {
+            var monthDir = Directory.CreateDirectory(Path.Combine(reportsDir.FullName, month)).FullName;
+            Directory.CreateDirectory(Path.Combine(monthDir, "Сводный отчет"));
+        }
+
+        public DirectoryService()
+        {
+            CreateReportsDirectories();
         }
     }
 }

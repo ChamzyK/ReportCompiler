@@ -17,14 +17,14 @@
     </DataTemplate>
 
     <!--UserControl-->
-    <DataTemplate DataType="{x:Type ucvm:DirectoriesViewModel}">
-        <ucv:DirectoriesView/>
-    </DataTemplate>
     <DataTemplate DataType="{x:Type ucvm:MenuViewModel}">
         <ucv:MenuView/>
     </DataTemplate>
     <DataTemplate DataType="{x:Type ucvm:MetaDataViewModel}">
         <ucv:MetaDataView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type ucvm:ReportsViewModel}">
+        <ucv:ReportsView/>
     </DataTemplate>
     
 </ResourceDictionary>
