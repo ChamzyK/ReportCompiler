@@ -8,5 +8,6 @@
         public string? Comment { get; set; }
         public TemplateType? Template { get; set; }
         public (int, int) StartCellAddress { get; set; }
+        public (int, int)? InspectionsAddress { get; set; }
     }
 }

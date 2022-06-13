@@ -1,7 +1,9 @@
 ﻿using OfficeOpenXml;
 using ReportCompiler.WPF.Models.Reports;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ReportCompiler.WPF.Services.SummaryServices
 {
@@ -66,16 +68,16 @@ namespace ReportCompiler.WPF.Services.SummaryServices
 
         public static (TemplateType template, ExcelRangeBase cell) GetTemplate(List<ExcelRangeBase> data)
         {
-            var firstTemplateCell = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Replace(" ", "").Replace("   ", "") == "кол-во(месяц)");
+            var firstTemplateCell = data.FirstOrDefault(cell => cell.Value.ToString().ToLower().Replace(" ", "").Replace("   ", "") == "кол-во(месяц)");
 
-            var secondTemplateCell = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Replace(" ", "").Replace("   ", "") == "х");
+            var secondTemplateCell = data.FirstOrDefault(cell => cell.Value.ToString().ToLower().Replace(" ", "").Replace("   ", "") == "х");
 
-            var thirdTemplateCellNo = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Contains("(нет)"));
-            var thirdTemplateCellYes = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Contains("(да)"));
+            var thirdTemplateCellNo = data.FirstOrDefault(cell => cell.Value.ToString().ToLower().Contains("(нет)"));
+            var thirdTemplateCellYes = data.FirstOrDefault(cell => cell.Value.ToString().ToLower().Contains("(да)"));
 
-            var forthTemplateCell = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Contains("получено"));
+            var forthTemplateCell = data.FirstOrDefault(cell => cell.Value.ToString().ToLower().Contains("получено"));
 
-            var fifthTemplateCell = data.FirstOrDefault(cell => (cell.Value.ToString()).ToLower().Contains("поступило"));
+            var fifthTemplateCell = data.FirstOrDefault(cell => cell.Value.ToString().ToLower().Contains("поступило"));
 
 
             if (firstTemplateCell != null) return (TemplateType.WithMonths, firstTemplateCell);
@@ -85,6 +87,25 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             else if (fifthTemplateCell != null) return (TemplateType.WithoutX, fifthTemplateCell);
 
             throw new System.Exception("Не удалось определить шаблон");
+        }
+
+        internal static string GetInspections(ExcelRange cell)
+        {
+            var value = cell.Value;
+            if (value is string @string && !string.IsNullOrWhiteSpace(@string))
+            {
+                var matches = Regex.Matches(@string, @"(\d+)");
+                var lastMatch = matches.LastOrDefault();
+                if (lastMatch != null && !string.IsNullOrWhiteSpace(lastMatch.Value) && int.TryParse(lastMatch.Value, out int result))
+                {
+                    if(result > 2000)
+                    {
+                        return "0";
+                    }
+                    return lastMatch.Value;
+                }
+            }
+            return "ОШИБКА ЧТЕНИЯ";
         }
     }
 }

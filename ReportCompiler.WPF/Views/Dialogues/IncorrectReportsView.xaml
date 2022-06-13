@@ -34,7 +34,7 @@
                 CanUserDeleteRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn 
-                        Binding="{Binding Name}" 
+                        Binding="{Binding Name}"
                         Header="Файл" 
                         MaxWidth="275">
                         <DataGridTextColumn.ElementStyle>
@@ -64,7 +64,7 @@
                                         Command="{Binding DataContext.CheckReportCommand,
                                         RelativeSource={RelativeSource FindAncestor,
                                         AncestorType=UserControl}}"
-                                        CommandParameter="{Binding Path}"/>
+                                        CommandParameter="{Binding Name}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

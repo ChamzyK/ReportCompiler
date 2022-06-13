@@ -10,6 +10,7 @@ namespace ReportCompiler.WPF.ViewModels.Dialogues
 {
     internal class IncorrectReportsViewModel : ViewModelBase
     {
+        public IFile FileService { get; }
         private ObservableCollection<ReportInfo>? incorrectReports;
         public ObservableCollection<ReportInfo>? IncorrectReports
         {
@@ -25,12 +26,12 @@ namespace ReportCompiler.WPF.ViewModels.Dialogues
 
         public ISummaryCompiler Compiler { get; }
         public ICommand CheckReportCommand { get; }
-        private bool CanCheckReport(object? arg) => arg != null && arg is string;
+        private bool CanCheckReport(object? arg) => arg != null && arg is string name && IncorrectReports.Any(info => info.Name == name);
         private void CheckReport(object? obj)
         {
-            var checkedReport = IncorrectReports.FirstOrDefault(reportInfo => reportInfo.Path == (string)obj);
+            var checkedReport = IncorrectReports.FirstOrDefault(reportInfo => reportInfo.Name == (string)obj);
             var checkResult = Compiler.GetReportInfo(checkedReport.Path);
-            if (checkResult.IsCorrect)
+            if (checkResult == null || checkResult.IsCorrect)
             {
                 IncorrectReports.Remove(checkedReport);
             }
@@ -42,11 +43,12 @@ namespace ReportCompiler.WPF.ViewModels.Dialogues
             }
         }
 
-        public IncorrectReportsViewModel(ISummaryCompiler compiler)
+        public IncorrectReportsViewModel(ISummaryCompiler compiler, IFile fileService)
         {
             Compiler = compiler;
 
             CheckReportCommand = new RelayCommand(CheckReport, CanCheckReport);
+            FileService = fileService;
         }
     }
 }

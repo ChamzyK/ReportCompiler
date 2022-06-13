@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace ReportCompiler.WPF.Services.SummaryServices
 {
-    internal class SummaryCompiler : ISummaryCompiler
+    internal class SummaryCompiler : ISummaryCompiler //TODO: болото
     {
         public IDirectory DirectoryService { get; }
         public IUserDialog DialogService { get; }
@@ -20,8 +20,9 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             DialogService = dialogService;
         }
 
-        public ReportInfo GetReportInfo(string filePath)
+        public ReportInfo? GetReportInfo(string filePath)
         {
+            if(!File.Exists(filePath)) return null;
             var fileInfo = new FileInfo(filePath);
             using var excelPackage = new ExcelPackage(fileInfo);
             var sheet = excelPackage.Workbook.Worksheets[0];
@@ -51,6 +52,18 @@ namespace ReportCompiler.WPF.Services.SummaryServices
                 }
             }
 
+            var inspectionsCell = data.Where(cell =>
+            cell.Value.ToString().ToLower().Contains("всего за")
+            || cell.Value.ToString().ToLower().Contains("итого за")
+            || cell.Value.ToString().ToLower().Contains("за год")
+            || cell.Value.ToString().ToLower().Contains("всего")).LastOrDefault();
+
+            if (inspectionsCell == null || inspectionsCell.Value == null || !IsValidCell(inspectionsCell.Value.ToString()))
+            {
+                isCorrect = false;
+                comment += $"Сумма проверок.";
+            }
+
             return new ReportInfo
             {
                 Name = fileInfo.Name,
@@ -58,7 +71,8 @@ namespace ReportCompiler.WPF.Services.SummaryServices
                 IsCorrect = isCorrect,
                 Comment = comment,
                 Template = template,
-                StartCellAddress = (row, column)
+                StartCellAddress = (row, column),
+                InspectionsAddress = inspectionsCell == null ? null : (inspectionsCell.Start.Row, inspectionsCell.Start.Column)
             };
         }
 
@@ -104,7 +118,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
                 RequestsSent = array[3],
                 RepliesReceviedNo = reportInfo.Template == TemplateType.Empty && array[4].Contains("да") ? "0" : array[4],
                 RepliesReceviedYes = reportInfo.Template == TemplateType.Empty ? (array[4].Contains("нет") ? "0" : array[4]) : array[5],
-                Inspections = "NotImplemented"
+                Inspections = reportInfo.InspectionsAddress != null ? ReportReader.GetInspections(sheet.Cells[reportInfo.InspectionsAddress.Value.Item1, reportInfo.InspectionsAddress.Value.Item2]) : null
             };
         }
 
@@ -153,9 +167,9 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             var summaryDirPath = ((Month)(int)(month != Month.January ? month - 1 : Month.December)).GetSummaryDirPath();
             var prevSummaryFiles = DirectoryService.GetExcelFiles(summaryDirPath);
 
-            if(prevSummaryFiles != null && prevSummaryFiles.Any())
+            if (prevSummaryFiles != null && prevSummaryFiles.Any())
             {
-               return new FileInfo(prevSummaryFiles.FirstOrDefault().Path);
+                return new FileInfo(prevSummaryFiles.FirstOrDefault().Path);
             }
             return null;
         }

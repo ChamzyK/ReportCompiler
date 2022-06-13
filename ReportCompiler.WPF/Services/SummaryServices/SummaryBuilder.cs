@@ -64,7 +64,7 @@ namespace ReportCompiler.WPF.Services.SummaryServices
             }
         }
 
-        private string ColorHexValue(Color color)
+        private static string ColorHexValue(Color color)
         {
             return color.A.ToString("X2") + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
         }
@@ -79,38 +79,41 @@ namespace ReportCompiler.WPF.Services.SummaryServices
         }
 
 
-        private static void FillCell(ExcelRange cell, string value)
+        private static void FillCell(ExcelRange cell, string? value)
         {
             var noSpaces = Regex.Replace(value, @"(\s+)", " ");
             cell.Value = noSpaces;
         }
 
-        private static void FillNumberCell(ExcelRange cell, string value)
+        private static void FillNumberCell(ExcelRange cell, string? value)
         {
-            var allSum = GetSum(value);
-
-            var withoutBrackets = Regex.Replace(value, @"\((.*?)\)", "");
-            var outSum = GetSum(withoutBrackets);
-
-            var insideBrackets = Regex.Match(value, @"\((.*?)\)").Value;
-            var inSum = GetSum(insideBrackets);
-
-
-            if (outSum == allSum || allSum == outSum * 2)
+            if (value != null)
             {
-                cell.Style.Numberformat.Format = "0";
-                cell.Value = outSum;
-            }
-            else if (inSum == allSum)
-            {
-                cell.Style.Numberformat.Format = "0";
-                cell.Value = inSum;
-            }
-            else
-            {
-                cell.Value = value;
-                cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                cell.Style.Fill.BackgroundColor.SetColor(Color.Red);
+                var allSum = GetSum(value);
+
+                var withoutBrackets = Regex.Replace(value, @"\((.*?)\)", "");
+                var outSum = GetSum(withoutBrackets);
+
+                var insideBrackets = Regex.Match(value, @"\((.*?)\)").Value;
+                var inSum = GetSum(insideBrackets);
+
+
+                if (outSum == allSum || allSum == outSum * 2)
+                {
+                    cell.Style.Numberformat.Format = "0";
+                    cell.Value = outSum;
+                }
+                else if (inSum == allSum)
+                {
+                    cell.Style.Numberformat.Format = "0";
+                    cell.Value = inSum;
+                }
+                else
+                {
+                    cell.Value = value;
+                    cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    cell.Style.Fill.BackgroundColor.SetColor(Color.Red);
+                }
             }
         }
 

@@ -5,6 +5,6 @@ namespace ReportCompiler.WPF.Services.Interfaces
     internal interface ISummaryCompiler
     {
         void CompileSummary(MetaData metaData);
-        ReportInfo GetReportInfo(string filePath);
+        ReportInfo? GetReportInfo(string filePath);
     }
 }
