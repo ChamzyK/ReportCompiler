@@ -29,7 +29,7 @@
         <Button 
             Content="Руководство пользователя"
             Command="{StaticResource OpenFileCommand}"
-            CommandParameter="manual.txt"/>
+            CommandParameter="user_manual.docx"/>
 
         <Separator/>
         <Button 
