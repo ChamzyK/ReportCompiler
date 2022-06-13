@@ -36,13 +36,15 @@ namespace ReportCompiler.WPF.Services
 
             foreach (Month month in Enum.GetValues(typeof(Month)))
             {
-                CreateReportsDirectory(reportsDir, month.GetName());
+                var monthName = month.GetName();
+                CreateReportsDirectory(reportsDir, monthName);
             }
         }
 
         private static void CreateReportsDirectory(DirectoryInfo reportsDir, string month)
         {
             var monthDir = Directory.CreateDirectory(Path.Combine(reportsDir.FullName, month)).FullName;
+
             Directory.CreateDirectory(Path.Combine(monthDir, "Сводный отчет"));
         }
 

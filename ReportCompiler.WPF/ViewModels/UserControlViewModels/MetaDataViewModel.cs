@@ -65,7 +65,7 @@ namespace ReportCompiler.WPF.ViewModels.UserControlViewModels
 
             foreach (Month month in Enum.GetValues(typeof(Month)))
             {
-                Months.Add(month.GetName());
+                Months.Add(month.GetName().Split(' ')[1]);
             }
         }
     }
