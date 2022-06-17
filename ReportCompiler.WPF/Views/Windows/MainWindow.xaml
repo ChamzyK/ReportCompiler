@@ -12,28 +12,46 @@
         Style="{StaticResource MaterialDesignWindow}">
 
     <Window.Resources>
-        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
-            <Setter Property="Margin" Value="5"/>
+        <Style 
+            TargetType="Button" 
+            BasedOn="{StaticResource MaterialDesignRaisedButton}">
+            <Setter 
+                Property="Margin" 
+                Value="5"/>
         </Style>
-        <Style TargetType="GroupBox" BasedOn="{StaticResource MaterialDesignCardGroupBox}">
-            <Setter Property="Margin" Value="5"/>
+        <Style 
+            TargetType="GroupBox" 
+            BasedOn="{StaticResource MaterialDesignCardGroupBox}">
+            <Setter 
+                Property="Margin" 
+                Value="5"/>
         </Style>
     </Window.Resources>
 
     <md:DialogHost>
 
         <md:DialogHost.DialogContent>
-            <ContentControl Content="{Binding}"/>
+            <ContentControl 
+                Content="{Binding}"/>
         </md:DialogHost.DialogContent>
 
-        <md:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+        <md:DrawerHost 
+            IsLeftDrawerOpen="{Binding 
+            ElementName=MenuToggleButton, 
+            Path=IsChecked}">
 
             <md:DrawerHost.LeftDrawerContent>
-                <DockPanel DataContext="{Binding Source={StaticResource Locator}, Path=MenuViewModel}">
+                <DockPanel 
+                    DataContext="{Binding 
+                    Source={StaticResource Locator}, 
+                    Path=MenuViewModel}">
                     <ToggleButton
                         Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                         HorizontalAlignment="Right"
-                        IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"
+                        IsChecked="{Binding 
+                        ElementName=MenuToggleButton, 
+                        Path=IsChecked, 
+                        Mode=TwoWay}"
                         DockPanel.Dock="Top"/>
                     <ContentPresenter Content="{Binding}"/>
                 </DockPanel>
@@ -44,7 +62,8 @@
                 <DockPanel DockPanel.Dock="Top">
                     <ToggleButton 
                         Name="MenuToggleButton"
-                        Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                        Style="{StaticResource 
+                        MaterialDesignHamburgerToggleButton}"
                         IsChecked="False"
                         DockPanel.Dock="Left"
                         Margin="10"/>
@@ -52,7 +71,8 @@
                         Text="Составление сводного отчета"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"/>
+                        Style="{StaticResource 
+                        MaterialDesignHeadline5TextBlock}"/>
                 </DockPanel>
 
                 <DockPanel DockPanel.Dock="Right">
@@ -60,11 +80,16 @@
                         DockPanel.Dock="Bottom"
                         Content="Составить сводный отчет" 
                         Command="{StaticResource CreateReportCommand}"
-                        CommandParameter="{Binding Source={StaticResource Locator}, Path=MetaDataViewModel}"/>
-                    <GroupBox DataContext="{Binding Source={StaticResource Locator}, Path=MetaDataViewModel}">
+                        CommandParameter="{Binding 
+                        Source={StaticResource Locator}, 
+                        Path=MetaDataViewModel}"/>
+                    <GroupBox DataContext="{Binding 
+                        Source={StaticResource Locator}, 
+                        Path=MetaDataViewModel}">
                         <GroupBox.Header>
                             <TextBlock
-                                Style="{DynamicResource MaterialDesignSubtitle2TextBlock}"
+                                Style="{DynamicResource
+                                MaterialDesignSubtitle2TextBlock}"
                                 Text="Заполнение данных"/>
                         </GroupBox.Header>
                         <StackPanel MaxWidth="225">
@@ -73,10 +98,13 @@
                     </GroupBox>
                 </DockPanel>
 
-                <GroupBox DataContext="{Binding Source={StaticResource Locator}, Path=ReportsViewModel}">
+                <GroupBox DataContext="{Binding 
+                    Source={StaticResource Locator}, 
+                    Path=ReportsViewModel}">
                     <GroupBox.Header>
                         <TextBlock 
-                            Style="{DynamicResource MaterialDesignSubtitle2TextBlock}"
+                            Style="{DynamicResource
+                            MaterialDesignSubtitle2TextBlock}"
                             Text="Папка с отчетами"/>
                     </GroupBox.Header>
                     <ContentPresenter Content="{Binding}"/>

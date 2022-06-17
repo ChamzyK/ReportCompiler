@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace ReportCompiler.WPF.Services.SummaryServices
 {
-    internal class SummaryCompiler : ISummaryCompiler //TODO: болото
+    internal class SummaryCompiler : ISummaryCompiler //TODO:болото
     {
         public IDirectory DirectoryService { get; }
         public IUserDialog DialogService { get; }
